@@ -453,8 +453,13 @@
     .ins-cards-row {
       display: flex; gap: var(--gap-xl); align-items: flex-end;
       max-width: 1080px; margin: 0 auto;
-      padding-bottom: 20px;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
+      padding: 0 var(--padding-80);
+      z-index: 2;
     }
 
     .ins-card {
@@ -984,7 +989,7 @@
     @media (max-width: 1279px) {
       .site-header { padding: 0 var(--padding-48); }
       .site-header.scrolled { padding: var(--padding-10) var(--padding-48); }
-      .ins-cards-row { min-width: 0; width: 100%; padding: 0 var(--padding-48) var(--padding-20); }
+      .ins-cards-row { min-width: 0; width: 100%; padding: 0 var(--padding-48); }
       .footer-inner { padding: var(--padding-56) var(--padding-48); }
       .why-col-r { width: 340px; }
 
@@ -1000,7 +1005,7 @@
     @media (max-width: 1023px) {
       .site-header { padding: 0 var(--padding-32); }
       .site-header.scrolled { padding: var(--padding-10) var(--padding-32); }
-      .ins-cards-row { min-width: 0; max-width: 100%; padding: 0 var(--padding-32) var(--padding-40); }
+      .ins-cards-row { min-width: 0; max-width: 100%; padding: 0 var(--padding-32); }
       .footer-inner { padding: var(--gap-4xl) var(--padding-32); }
       .footer-nav { flex-wrap: wrap; gap: var(--gap-2xl); }
       .footer-nav-cols { flex-wrap: wrap; }
@@ -1203,10 +1208,11 @@
       /* Insurance cards - scroll */
       .ins-cards-row {
         flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; padding: 0 var(--padding-12) var(--padding-8); gap: var(--gap-md);
+        scrollbar-width: none; padding: 0 var(--padding-20); gap: var(--gap-md);
         min-width: 0; max-width: 100%; margin: 0;
         scroll-padding: 0 var(--padding-20);
         justify-content: flex-start;
+        left: 0; transform: none; bottom: 12px;
       }
       .ins-cards-row::-webkit-scrollbar { display: none; }
       .ins-card { min-width: 158px; flex: 0 0 158px; height: 175px; transition: none; }
