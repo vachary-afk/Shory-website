@@ -720,50 +720,62 @@
       position: absolute;
       inset: 0;
       border-radius: var(--radius-full);
-      padding: var(--padding-2);
-      background: linear-gradient(
-        var(--grad-angle, 0deg),
-        var(--blue), #a855f7, #ec4899, #f97316, var(--blue)
+      padding: 3px;
+      background: conic-gradient(
+        from var(--border-angle, 0deg),
+        var(--blue) 0%,
+        #60a5ff 20%,
+        #a78bfa 35%,
+        var(--blue) 50%,
+        #60a5ff 65%,
+        #3b82f6 80%,
+        var(--blue) 100%
       );
-      background-size: 300% 300%;
       -webkit-mask:
-        linear-gradient(var(--white) 0 0) content-box,
-        linear-gradient(var(--white) 0 0);
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
-      animation: gradBorderSpin 4s linear infinite;
+      animation: borderRotate 2s linear infinite;
     }
 
-    /* Soft glowing effect around border */
+    /* Multi-layer dynamic glow */
     .cta-float::after {
       content: '';
       position: absolute;
-      inset: -8px;
+      inset: -14px;
       border-radius: var(--radius-full);
-      background: linear-gradient(
-        var(--grad-angle, 0deg),
-        var(--blue), #a855f7, #ec4899, #f97316, var(--blue)
+      background: radial-gradient(ellipse at center,
+        rgba(29,104,255,0.9) 0%,
+        rgba(96,165,255,0.6) 30%,
+        rgba(139,92,246,0.3) 60%,
+        transparent 75%
       );
-      background-size: 300% 300%;
-      opacity: 0.4;
-      filter: blur(16px);
+      filter: blur(18px);
       z-index: -1;
-      animation: softGlow 3s ease-in-out infinite;
+      animation: pulseGlow 1.8s ease-in-out infinite;
     }
 
-    @keyframes gradBorderSpin {
-      0%   { background-position: 0% 50%; filter: hue-rotate(0deg); }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
+    @property --border-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
     }
-    @keyframes softGlow {
+
+    @keyframes borderRotate {
+      to { --border-angle: 360deg; }
+    }
+
+    @keyframes pulseGlow {
       0%, 100% {
-        opacity: 0.3;
+        opacity: 0.7;
         transform: scale(1);
+        filter: blur(18px);
       }
       50% {
-        opacity: 0.6;
-        transform: scale(1.05);
+        opacity: 1;
+        transform: scale(1.12);
+        filter: blur(22px);
       }
     }
 
@@ -1604,7 +1616,6 @@
       <h1 class="hero-title">Top insurers. Best prices. One app.</h1>
     </div>
 
-    <div class="hero-spacer"></div>
 
     <!-- Insurance cards -->
     <div class="ins-cards-row" id="ins-cards">
@@ -2828,33 +2839,18 @@
       floatEl.classList.remove('visible');
       return;
     }
-    const heroBottom   = hero.getBoundingClientRect().bottom;
-    const footerTop    = footer.getBoundingClientRect().top;
-    const vpHeight     = window.innerHeight;
-    const floatH       = floatEl.offsetHeight;
 
-    // Show when user has scrolled past 70% of the hero section height
-    const heroHeight  = hero.offsetHeight;
-    const heroScrolled = heroHeight - heroBottom - (vpHeight - heroHeight < 0 ? 0 : 0);
-    const shouldShow  = window.scrollY >= heroHeight * 0.7;
+    // Show as soon as user starts scrolling (any scroll > 10px)
+    const shouldShow = window.scrollY > 10;
 
     if (!shouldShow) {
       floatEl.classList.remove('visible');
-      floatEl.style.bottom = MARGIN + 'px';
       return;
     }
 
     floatEl.classList.add('visible');
-
-    // If footer is creeping up — pin float to footer top
-    const spaceAboveFooter = footerTop - floatH - MARGIN;
-    if (spaceAboveFooter < vpHeight - floatH - MARGIN) {
-      // Footer is entering viewport — lock float above it
-      const newBottom = vpHeight - footerTop + MARGIN;
-      floatEl.style.bottom = Math.max(MARGIN, newBottom) + 'px';
-    } else {
-      floatEl.style.bottom = MARGIN + 'px';
-    }
+    // Always stay fixed at bottom — no footer interference
+    floatEl.style.bottom = MARGIN + 'px';
   }
 
   window.addEventListener('scroll', updateFloat, { passive: true });
