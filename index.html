@@ -1209,8 +1209,10 @@
         justify-content: flex-start;
       }
       .ins-cards-row::-webkit-scrollbar { display: none; }
-      .ins-card { min-width: 158px; flex: 0 0 158px; height: 175px; }
-      .ins-card.active { height: 196px; }
+      .ins-card { min-width: 158px; flex: 0 0 158px; height: 175px; transition: none; }
+      .ins-card.active { height: 175px; }
+      .ins-card:hover .ins-card-inner,
+      .ins-card:active .ins-card-inner { box-shadow: var(--elevation-sm); transform: none; }
       .ins-card-inner { padding: var(--padding-16) var(--padding-16); }
       .ins-card.active .ins-card-front,
       .ins-card:not(.active) .ins-card-front {
