@@ -66,6 +66,7 @@
       --padding-28: 28px;
       --padding-32: 32px;
       --padding-40: 40px;
+      --padding-18: 18px;
       --padding-48: 48px;
       --padding-56: 56px;
       --padding-80: 80px;
@@ -135,7 +136,7 @@
 
     /* Large Desktop / HiRes ≥ 1440px — same 1280px content, more side space */
     @media (min-width: 1440px) {
-      .container { min-width: 1440px; padding: 0 80px; }
+      .container { max-width: 1440px; padding: 0 80px; }
     }
 
     /* Laptop 1024–1279px */
@@ -150,7 +151,7 @@
 
     /* Mobile < 768px */
     @media (max-width: 767px) {
-      .container { max-width: 390px; padding: 0 20px; }
+      .container { max-width: none; padding: 0 20px; }
     }
 
     /* ── HEADER ── */
@@ -219,7 +220,7 @@
 
     /* Icon buttons */
     .icon-btn {
-      background: none; width: 36px; height: 36px;
+      background: none; width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
       border-radius: var(--radius-md); transition: background 0.15s;
     }
@@ -255,7 +256,7 @@
     }
     .btn-login:hover { border-color: var(--blue); color: var(--blue); background: var(--bg-brand-light); }
 
-    .hamburger { display: none; background: none; padding: var(--gap-sm); }
+    .hamburger { display: none; background: none; padding: var(--gap-sm); width: 44px; height: 44px; align-items: center; justify-content: center; }
     .hamburger .ico-stroke { stroke: var(--text); }
 
     /* ── MEGA MENU ── */
@@ -428,7 +429,7 @@
     /* Fix: title sits in upper portion, not vertically centred */
     .hero-text {
       text-align: center;
-      padding-top: 200px;
+      padding-top: max(200px, 14vh);
       max-width: 988px; margin: 0 auto;
     }
     .hero-title {
@@ -849,6 +850,7 @@
     .ftab {
       padding: var(--gap-default) var(--padding-20); border-radius: var(--radius-full); border: var(--border-width) solid var(--border-2);
       background: var(--card); font-size: var(--text-size-body-md); font-weight: var(--font-weight-medium); color: var(--text); white-space: nowrap;
+      min-height: 44px; display: inline-flex; align-items: center;
     }
     .ftab.active { background: var(--blue); color: var(--white); border-color: var(--blue); }
     .scroll-outer {
@@ -982,13 +984,14 @@
     @media (max-width: 1279px) {
       .site-header { padding: 0 var(--padding-48); }
       .site-header.scrolled { padding: var(--padding-10) var(--padding-48); }
-      .ins-cards-row { min-width: 1024px; padding: 0 var(--padding-48) var(--padding-20); }
+      .ins-cards-row { min-width: 0; width: 100%; padding: 0 var(--padding-48) var(--padding-20); }
       .footer-inner { padding: var(--padding-56) var(--padding-48); }
+      .why-col-r { width: 340px; }
 
       /* Hero adjustments for laptop screens */
       .hero { min-height: 95vh; }
       .hero-body { height: 95vh; }
-      .hero-text { padding-top: 100px; }
+      .hero-text { padding-top: max(100px, 8vh); }
       .hero-title { font-size: 42px; }
       .hero-subtitle { font-size: 17px; }
     }
@@ -997,13 +1000,19 @@
     @media (max-width: 1023px) {
       .site-header { padding: 0 var(--padding-32); }
       .site-header.scrolled { padding: var(--padding-10) var(--padding-32); }
-      .ins-cards-row { max-width: 100%; padding: 0 var(--padding-32) var(--padding-40); }
+      .ins-cards-row { min-width: 0; max-width: 100%; padding: 0 var(--padding-32) var(--padding-40); }
       .footer-inner { padding: var(--gap-4xl) var(--padding-32); }
+      .footer-nav { flex-wrap: wrap; gap: var(--gap-2xl); }
+      .footer-nav-cols { flex-wrap: wrap; }
       .why-col-r { width: 100%; }
       .scroll-sec-title { font-size: var(--text-size-heading); }
 
+      /* App CTA — hide overflow bg image, stack content */
+      .app-cta-bg { display: none; }
+      .app-cta-content { position: relative; top: 0; left: 0; width: 100%; padding: var(--padding-40) var(--padding-32); }
+
       /* Hero adjustments for tablet screens */
-      .hero-text { padding-top: 120px; }
+      .hero-text { padding-top: max(120px, 10vh); }
       .hero-title { font-size: 38px; }
       .hero-subtitle { font-size: 16px; }
       .ins-cards-row { gap: var(--gap-lg); }
