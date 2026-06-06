@@ -1151,6 +1151,7 @@
       .mobile-panel-controls {
         display: flex;
         flex-direction: row;
+        align-items: center;
         gap: var(--gap-sm);
         margin-top: auto;
         padding-top: var(--gap-xl);
@@ -1160,6 +1161,11 @@
       .mobile-panel-controls .btn-login {
         flex: 1;
         justify-content: center;
+      }
+      .mobile-panel-controls .icon-btn {
+        flex-shrink: 0;
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-md);
       }
       .mega-panel,
       .mega-overlay {
@@ -2321,7 +2327,7 @@
   const saved = localStorage.getItem('shory-theme');
   if (saved === 'dark') html.setAttribute('data-theme', 'dark');
 
-  themeToggle.addEventListener('click', () => {
+  const toggleTheme = () => {
     const isDark = html.getAttribute('data-theme') === 'dark';
     if (isDark) {
       html.removeAttribute('data-theme');
@@ -2330,7 +2336,11 @@
       html.setAttribute('data-theme', 'dark');
       localStorage.setItem('shory-theme', 'dark');
     }
-  });
+  };
+
+  themeToggle.addEventListener('click', toggleTheme);
+  const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
+  if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
 
   // ── GSAP micro-animations ──
   gsap.registerPlugin(ScrollTrigger);
@@ -3135,6 +3145,28 @@ document.addEventListener('keydown', e => {
   </nav>
 
   <div class="mobile-panel-controls">
+    <button class="icon-btn" aria-label="Search">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle class="ico-stroke" cx="10" cy="10" r="7"/>
+        <path class="ico-stroke" d="m19 19-4.35-4.35"/>
+      </svg>
+    </button>
+    <button class="icon-btn" id="theme-toggle-mobile" aria-label="Toggle theme">
+      <svg class="icon-sun" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+        <circle class="ico-stroke" cx="12" cy="12" r="4.5"/>
+        <line class="ico-stroke" x1="12" y1="2" x2="12" y2="5"/>
+        <line class="ico-stroke" x1="12" y1="19" x2="12" y2="22"/>
+        <line class="ico-stroke" x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+        <line class="ico-stroke" x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+        <line class="ico-stroke" x1="2" y1="12" x2="5" y2="12"/>
+        <line class="ico-stroke" x1="19" y1="12" x2="22" y2="12"/>
+        <line class="ico-stroke" x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+        <line class="ico-stroke" x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path class="ico-stroke" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+      </svg>
+    </button>
     <button class="btn-lang" aria-label="Switch language"><span class="flag-emoji">🇦🇪</span><span>عربي</span></button>
     <button class="btn-login">Login</button>
   </div>
