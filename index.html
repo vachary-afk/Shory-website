@@ -2188,6 +2188,8 @@
 <!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
 <!-- SplitType -->
 <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
 
@@ -2369,6 +2371,20 @@
   // ── GSAP + Lenis + SplitType setup ──
   gsap.registerPlugin(ScrollTrigger);
 
+  // Lenis — properly configured this time
+  // duration ~1.0, ease out quad feels native but silky
+  // wheelMultiplier 0.8 so it doesn't overshoot
+  const lenis = new Lenis({
+    duration: 1.0,
+    easing: (t) => 1 - Math.pow(1 - t, 2),
+    wheelMultiplier: 0.8,
+    touchMultiplier: 2,
+    smoothWheel: true,
+  });
+
+  // Wire Lenis into GSAP — this is the correct pattern, not optional
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
   // ── Reusable animation helpers ──
