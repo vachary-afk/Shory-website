@@ -2188,6 +2188,10 @@
 <!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<!-- SplitType -->
+<script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
 
 <script>
 
@@ -2364,142 +2368,148 @@
   const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
   if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
 
-  // ── GSAP micro-animations ──
+  // ── GSAP + Lenis + SplitType setup ──
   gsap.registerPlugin(ScrollTrigger);
 
-  // 0a. Hero title — StaggeredLetters entrance
-  (function () {
+  // Lenis smooth scroll synced with GSAP ticker
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // ── Reusable animation helpers ──
+  function animateHeading(el, stConfig = {}) {
+    const target = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!target) return;
+    const split = new SplitType(target, { types: 'lines' });
+    gsap.set(split.lines, { willChange: 'transform, opacity' });
+    gsap.fromTo(split.lines,
+      { y: 60, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.1, duration: 0.9, ease: 'power3.out',
+        onComplete() { split.lines.forEach(l => l.style.willChange = 'auto'); },
+        scrollTrigger: { trigger: target, start: 'top 82%', toggleActions: 'play none none none', ...stConfig }
+      });
+  }
+
+  function animateText(el, stConfig = {}) {
+    const target = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!target) return;
+    gsap.set(target, { willChange: 'transform, opacity' });
+    gsap.fromTo(target,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
+        onComplete() { target.style.willChange = 'auto'; },
+        scrollTrigger: { trigger: target, start: 'top 82%', toggleActions: 'play none none none', ...stConfig }
+      });
+  }
+
+  function animateCards(els, stConfig = {}) {
+    const targets = typeof els === 'string' ? gsap.utils.toArray(els) : Array.from(els);
+    if (!targets.length) return;
+    gsap.set(targets, { willChange: 'transform, opacity' });
+    gsap.fromTo(targets,
+      { scale: 0.94, opacity: 0 },
+      { scale: 1, opacity: 1, stagger: 0.12, duration: 1, ease: 'power3.out',
+        onComplete() { targets.forEach(t => t.style.willChange = 'auto'); },
+        scrollTrigger: { trigger: targets[0], start: 'top 82%', toggleActions: 'play none none none', ...stConfig }
+      });
+  }
+
+  // ── Hero entrance (no scroll trigger — plays on load) ──
+  (() => {
     const titleEl = document.querySelector('.hero-title');
-    if (!titleEl) return;
-
-    // Split each text node into word spans, then letter spans
-    // Preserve the <br> element
-    const nodes = Array.from(titleEl.childNodes);
-    titleEl.innerHTML = '';
-
-    nodes.forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent;
-        // Split by words, keep spaces
-        const words = text.split(/(\s+)/);
-        words.forEach(word => {
-          if (/^\s+$/.test(word)) {
-            titleEl.appendChild(document.createTextNode(word));
-          } else {
-            const wordSpan = document.createElement('span');
-            wordSpan.style.cssText = 'display:inline-block; overflow:hidden; vertical-align:bottom;';
-            word.split('').forEach(ch => {
-              const s = document.createElement('span');
-              s.textContent = ch;
-              s.classList.add('_hl'); // hero letter
-              s.style.cssText = 'display:inline-block;';
-              wordSpan.appendChild(s);
-            });
-            titleEl.appendChild(wordSpan);
-          }
+    if (titleEl) {
+      const split = new SplitType(titleEl, { types: 'lines' });
+      gsap.set(split.lines, { willChange: 'transform, opacity', overflow: 'hidden' });
+      gsap.fromTo(split.lines,
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.1, duration: 0.9, ease: 'power3.out', delay: 0.2,
+          onComplete() { split.lines.forEach(l => l.style.willChange = 'auto'); }
         });
-      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {
-        titleEl.appendChild(document.createElement('br'));
-      }
-    });
+    }
+    gsap.fromTo('.hero-subtitle',
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', delay: 0.7 });
 
-    const letters = titleEl.querySelectorAll('._hl');
-
-    // Set initial state
-    gsap.set(letters, { opacity: 0, y: '110%', rotateZ: 6 });
-
-    // Stagger in
-    gsap.to(letters, {
-      opacity: 1,
-      y: '0%',
-      rotateZ: 0,
-      duration: 0.65,
-      ease: 'power3.out',
-      stagger: 0.022,
-      delay: 0.25,
-    });
+    const cards = gsap.utils.toArray('#ins-cards .ins-card');
+    gsap.set(cards, { willChange: 'transform, opacity' });
+    gsap.fromTo(cards,
+      { y: 60, opacity: 0, scale: 0.94 },
+      { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.9, ease: 'power3.out', delay: 1.0,
+        onComplete() { cards.forEach(c => c.style.willChange = 'auto'); }
+      });
   })();
 
-  // 0b. Hero subtitle — fade + slide after title
-  gsap.from('.hero-subtitle', {
-    opacity: 0,
-    y: 18,
-    duration: 0.7,
-    delay: 0.95,
-    ease: 'power2.out',
-  });
-
-  // 0c. Hero cards — staggered ease-out entrance on load
-  gsap.set('#ins-cards .ins-card', { opacity: 0, y: 60, scale: 0.94 });
-  gsap.to('#ins-cards .ins-card', {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    duration: 0.75,
-    delay: 1.0,
-    stagger: {
-      each: 0.1,
-      ease: 'power1.inOut',
-    },
-    ease: 'expo.out',
-    clearProps: 'transform,opacity',
-  });
-
-  // 0d. Hero insurance cards — GSAP hover micro-animation
+  // ── Hero card hover micro-animations ──
   document.querySelectorAll('#ins-cards .ins-card').forEach(card => {
     const img = card.querySelector('.ins-card-img img');
-
     card.addEventListener('mouseenter', () => {
-      gsap.to(card, {
-        y: -5,
-        scale: 1.03,
-        boxShadow: '0 12px 36px rgba(0,0,0,0.18)',
-        duration: 0.45,
-        ease: 'expo.out',
-        overwrite: 'auto',
-      });
-      if (img) gsap.to(img, {
-        y: -4,
-        scale: 1.08,
-        duration: 0.5,
-        ease: 'expo.out',
-        overwrite: 'auto',
-      });
+      gsap.to(card, { y: -5, scale: 1.03, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+      if (img) gsap.to(img, { y: -4, scale: 1.08, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
     });
-
     card.addEventListener('mouseleave', () => {
-      gsap.to(card, {
-        y: 0,
-        scale: 1,
-        boxShadow: '0 0px 0px rgba(0,0,0,0)',
-        duration: 0.45,
-        ease: 'expo.out',
-        overwrite: 'auto',
-      });
-      if (img) gsap.to(img, {
-        y: 0,
-        scale: 1,
-        duration: 0.45,
-        ease: 'expo.out',
-        overwrite: 'auto',
-      });
+      gsap.to(card, { y: 0, scale: 1, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+      if (img) gsap.to(img, { y: 0, scale: 1, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
     });
   });
 
-  // 1. Why Shory cards — scroll-in entrance (once, on enter)
-  gsap.utils.toArray('.why-card').forEach((card, i) => {
-    gsap.from(card, {
-      scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-      opacity: 0,
-      y: 28,
-      scale: 0.97,
-      duration: 0.55,
-      delay: i * 0.07,
-      ease: 'power2.out',
+  // ── Why Shory section ──
+  animateHeading('.why-section .sec-title');
+  animateText('.why-section .sec-sub');
+  animateCards('.why-section .why-card');
+
+  // ── Trust bar ──
+  animateCards([...document.querySelectorAll('.trust-item'), ...document.querySelectorAll('.trust-cbuae')]);
+  gsap.fromTo('.trust-div',
+    { opacity: 0, scaleY: 0 },
+    { opacity: 1, scaleY: 1, stagger: 0.1, duration: 0.4, ease: 'power2.out', delay: 0.3,
+      scrollTrigger: { trigger: '.trust-bar', start: 'top 82%', toggleActions: 'play none none none' },
+      transformOrigin: 'center center'
+    });
+
+  // Trust count-up
+  gsap.utils.toArray('.trust-num').forEach(el => {
+    const raw = el.textContent.trim();
+    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+    const suffix = raw.replace(/[0-9.]/g, '');
+    if (!num) return;
+    const obj = { val: 0 };
+    el.textContent = '0' + suffix;
+    gsap.to(obj, {
+      val: num, duration: 1.4, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' },
+      onUpdate() {
+        el.textContent = (obj.val % 1 === 0 ? Math.floor(obj.val) : obj.val.toFixed(1)) + suffix;
+      },
     });
   });
 
-  // 2. Why Shory cards — proximity-based sequential zoom interaction
+  // ── Choose the right insurance section ──
+  animateHeading('.scroll-sec-title');
+  animateText('.scroll-sec-sub');
+  animateCards('.vid-card');
+
+  // ── Testimonials ──
+  animateHeading('.testi-title');
+  animateCards('.testi-card');
+
+  // ── FAQ ──
+  animateHeading('.faq-head .sec-title');
+  animateText('.faq-head-sub');
+  animateCards('.faq-item');
+
+  // ── App CTA ──
+  animateHeading('.app-cta-title');
+
+  // ── Footer ──
+  animateHeading('.footer-help-title');
+
+  // ── Why Shory cards — proximity-based sequential zoom interaction
   const whyGrid = document.querySelector('.why-grid');
   const whyCards = Array.from(document.querySelectorAll('.why-card'));
   let currentZoomedCard = null;
@@ -2683,70 +2693,7 @@
     }
   }
 
-  // 3a. Trust bar — container slide-up entrance
-  gsap.from('.trust-bar-inner', {
-    scrollTrigger: { trigger: '.trust-bar', start: 'top 90%', once: true },
-    opacity: 0,
-    y: 24,
-    duration: 0.6,
-    ease: 'power2.out',
-  });
 
-  // 3b. Trust bar items — staggered fade-in
-  gsap.from(['.trust-item', '.trust-cbuae'], {
-    scrollTrigger: { trigger: '.trust-bar', start: 'top 88%', once: true },
-    opacity: 0,
-    y: 16,
-    scale: 0.96,
-    duration: 0.55,
-    stagger: 0.12,
-    delay: 0.1,
-    ease: 'power2.out',
-  });
-
-  // 3c. Dividers — fade in after items
-  gsap.from('.trust-div', {
-    scrollTrigger: { trigger: '.trust-bar', start: 'top 88%', once: true },
-    opacity: 0,
-    scaleY: 0,
-    duration: 0.4,
-    stagger: 0.1,
-    delay: 0.3,
-    ease: 'power2.out',
-    transformOrigin: 'center center',
-  });
-
-  // 3d. Trust bar numbers — count-up on scroll-enter
-  gsap.utils.toArray('.trust-num').forEach(el => {
-    const raw = el.textContent.trim();
-    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
-    const suffix = raw.replace(/[0-9.]/g, '');
-    if (!num) return;
-    const obj = { val: 0 };
-    el.textContent = '0' + suffix; // reset display to 0 until scroll triggers
-    gsap.to(obj, {
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-      val: num,
-      duration: 1.4,
-      ease: 'power2.out',
-      onUpdate() {
-        el.textContent = (obj.val % 1 === 0
-          ? Math.floor(obj.val)
-          : obj.val.toFixed(1)) + suffix;
-      },
-    });
-  });
-
-  // 4. Section headings — subtle fade-slide on enter
-  gsap.utils.toArray('.sec-title, .scroll-sec-title, .testi-title, .faq-head-title').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-      opacity: 0,
-      y: 20,
-      duration: 0.6,
-      ease: 'power2.out',
-    });
-  });
 </script>
 
 <!-- Options panel — positioned via JS, outside float so no parent padding math -->
