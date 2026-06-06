@@ -257,6 +257,7 @@
     .btn-login:hover { border-color: var(--blue); color: var(--blue); background: var(--bg-brand-light); }
 
     .hamburger { display: none; background: none; padding: var(--gap-sm); width: 44px; height: 44px; align-items: center; justify-content: center; }
+    .mobile-search-btn { display: none; }
     .hamburger .ico-stroke { stroke: var(--text); }
 
     /* ── MEGA MENU ── */
@@ -626,7 +627,7 @@
     .partner-img-tabby { height: 30px; width: auto; object-fit: contain; }
     .partner-img-fab { height: 40px; width: auto; }
     .why-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
-    .why-info-row { display: flex; align-items: center; gap: var(--gap-md); }
+    .why-info-row { display: flex; align-items: center; gap: var(--gap-md); font-size: var(--text-size-title-md) }
 
     /* Trust bar */
     .trust-bar { padding: 0; }
@@ -1042,7 +1043,8 @@
         gap: var(--gap-lg);
       }
       .header-logo { height: 24px; }
-      .hamburger { display: flex; align-items: center; justify-content: center; margin-left: auto; }
+      .hamburger { display: flex; align-items: center; justify-content: center; }
+      .mobile-search-btn { display: flex; margin-left: auto; }
       .hamburger .ico-open { display: block; }
       .hamburger .ico-close { display: none; }
       .site-header.mobile-open .hamburger .ico-open { display: block; }
@@ -1188,12 +1190,12 @@
         transform: scale(1.08);
       }
       .hero-bg img {
-        transform: scale(1.5);
-        transform-origin: center 25%;
+        transform: scale(2);
+        transform-origin: center 50%;
       }
       .hero-bg img {
-        transform: scale(1.3);
-        transform-origin: center center;
+        transform: scale(2);
+        transform-origin: center 65%;
       }
       .hero-title {
         font-size: 20px;
@@ -1572,6 +1574,14 @@
 
           <button class="btn-login">Login</button>
         </div>
+
+        <!-- Search (mobile only, next to hamburger) -->
+        <button class="icon-btn mobile-search-btn" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle class="ico-stroke" cx="10" cy="10" r="7"/>
+            <path class="ico-stroke" d="m19 19-4.35-4.35"/>
+          </svg>
+        </button>
 
         <!-- Hamburger (mobile) -->
         <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -3145,12 +3155,6 @@ document.addEventListener('keydown', e => {
   </nav>
 
   <div class="mobile-panel-controls">
-    <button class="icon-btn" aria-label="Search">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle class="ico-stroke" cx="10" cy="10" r="7"/>
-        <path class="ico-stroke" d="m19 19-4.35-4.35"/>
-      </svg>
-    </button>
     <button class="icon-btn" id="theme-toggle-mobile" aria-label="Toggle theme">
       <svg class="icon-sun" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
         <circle class="ico-stroke" cx="12" cy="12" r="4.5"/>
