@@ -428,11 +428,15 @@
       padding-top: 0;
     }
 
-    /* Fix: title sits in upper portion, not vertically centred */
     .hero-text {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
-      padding-top: max(330px, 14vh);
-      max-width: 988px; margin: 0 auto;
+      width: 100%;
+      max-width: 988px;
+      padding: 0 var(--padding-20);
     }
     .hero-title {
       font-size: var(--text-size-hero); font-weight: var(--font-weight-bold); line-height: 1.18;
@@ -994,7 +998,6 @@
     @media (max-width: 1439px) {
       .hero { min-height: 90vh; }
       .hero-body { height: 90vh; }
-      .hero-text { padding-top: 120px; }
       .hero-title { font-size: 46px; }
       .hero-subtitle { font-size: 19px; }
     }
@@ -1010,7 +1013,6 @@
       /* Hero adjustments for laptop screens */
       .hero { min-height: 95vh; }
       .hero-body { height: 95vh; }
-      .hero-text { padding-top: max(100px, 8vh); }
       .hero-title { font-size: 42px; }
       .hero-subtitle { font-size: 17px; }
     }
@@ -1031,7 +1033,6 @@
       .app-cta-content { position: relative; top: 0; left: 0; width: 100%; padding: var(--padding-40) var(--padding-32); }
 
       /* Hero adjustments for tablet screens */
-      .hero-text { padding-top: max(120px, 10vh); }
       .hero-title { font-size: 38px; }
       .hero-subtitle { font-size: 16px; }
       .ins-cards-row { gap: var(--gap-lg); }
@@ -1225,7 +1226,7 @@
         margin-bottom: var(--padding-8);
       }
       .hero-text {
-        padding: 0x;
+        padding: 0 var(--padding-20);
         max-width: 100%;
       }
       .hero-spacer { min-height: var(--gap-md); }
