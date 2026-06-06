@@ -7,10 +7,12 @@
    1. LENIS SMOOTH SCROLL — synced with GSAP
 ───────────────────────────────────────────── */
 const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  duration: 0.7,
+  easing: (t) => 1 - Math.pow(1 - t, 3),
   orientation: 'vertical',
   smoothWheel: true,
+  wheelMultiplier: 1,
+  touchMultiplier: 1.5,
 });
 
 lenis.on('scroll', ScrollTrigger.update);
