@@ -2446,11 +2446,64 @@
     });
   });
 
-  // ── Why Shory section ──
-  // ── Why choose Shory ──
-  animateHeading('.section .sec-title');
-  animateText('.section .sec-sub');
-  animateCards('.why-card');
+  // ── Wire animations across ALL matching sections ──
+  // querySelectorAll so every instance is caught, not just the first
+
+  // Headings — every sec-title, scroll-sec-title, testi-title, app-cta-title, footer-help-title
+  document.querySelectorAll('.sec-title, .scroll-sec-title, .testi-title, .app-cta-title, .footer-help-title')
+    .forEach(el => animateHeading(el));
+
+  // Body text — every sec-sub, scroll-sec-sub, faq-head-sub
+  document.querySelectorAll('.sec-sub, .scroll-sec-sub, .faq-head-sub')
+    .forEach(el => animateText(el));
+
+  // Why cards — each card individually so stagger is per-card not global
+  document.querySelectorAll('.why-card')
+    .forEach((card, i) => {
+      gsap.set(card, { willChange: 'transform, opacity' });
+      gsap.fromTo(card,
+        { scale: 0.94, opacity: 0, y: 30 },
+        { scale: 1, opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: i * 0.08,
+          onComplete() { card.style.willChange = 'auto'; },
+          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
+        });
+    });
+
+  // Video cards — each individually so both scroll-sec sections animate
+  document.querySelectorAll('.vid-card')
+    .forEach((card, i) => {
+      gsap.set(card, { willChange: 'transform, opacity' });
+      gsap.fromTo(card,
+        { scale: 0.94, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1, ease: 'power3.out', delay: (i % 5) * 0.1,
+          onComplete() { card.style.willChange = 'auto'; },
+          scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none none' }
+        });
+    });
+
+  // Testimonial cards
+  document.querySelectorAll('.testi-card')
+    .forEach((card, i) => {
+      gsap.set(card, { willChange: 'transform, opacity' });
+      gsap.fromTo(card,
+        { scale: 0.94, opacity: 0, y: 30 },
+        { scale: 1, opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: i * 0.1,
+          onComplete() { card.style.willChange = 'auto'; },
+          scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' }
+        });
+    });
+
+  // FAQ items
+  document.querySelectorAll('.faq-item')
+    .forEach((item, i) => {
+      gsap.set(item, { willChange: 'transform, opacity' });
+      gsap.fromTo(item,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: i * 0.07,
+          onComplete() { item.style.willChange = 'auto'; },
+          scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' }
+        });
+    });
 
   // ── Trust bar ──
   animateCards([...document.querySelectorAll('.trust-item'), ...document.querySelectorAll('.trust-cbuae')]);
@@ -2477,26 +2530,6 @@
       },
     });
   });
-
-  // ── Choose the right insurance (Recent articles) ──
-  animateHeading('.scroll-sec .scroll-sec-title');
-  animateText('.scroll-sec .scroll-sec-sub');
-  animateCards('.vid-card');
-
-  // ── Testimonials ──
-  animateHeading('.testi-title');
-  animateCards('.testi-card');
-
-  // ── FAQ ──
-  animateHeading('.faq-head .sec-title');
-  animateText('.faq-head-sub');
-  animateCards('.faq-item');
-
-  // ── App CTA ──
-  animateHeading('.app-cta-title');
-
-  // ── Footer ──
-  animateHeading('.footer-help-title');
 
   // ── Why Shory cards — proximity-based sequential zoom interaction
   const whyGrid = document.querySelector('.why-grid');
