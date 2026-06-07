@@ -410,7 +410,7 @@
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover; object-position: center 25%;
-      transform: scale(1.25);
+      transform: scale(1.50);
     }
     @media (min-width: 1440px) {
       .hero-bg img {
@@ -1060,6 +1060,23 @@
     .app-qr-label { font-size: var(--text-size-body-lg); font-weight: var(--font-weight-bold); color: var(--white); line-height: 20px; }
     .app-cta-bg { position: absolute; top: -154px; left: 373px; width: 927px; height: 618px; }
     .app-cta-bg img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Video Card Popup Modal ── */
+    .vc-overlay { position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease; }
+    .vc-overlay.open { opacity:1;pointer-events:auto; }
+    .vc-box { background:var(--card);border-radius:var(--radius-2xl);width:100%;max-width:520px;overflow:hidden;box-shadow:var(--elevation-lg);position:relative;transform:translateY(28px) scale(.96);transition:transform .38s cubic-bezier(.34,1.56,.64,1); }
+    .vc-overlay.open .vc-box { transform:translateY(0) scale(1); }
+    .vc-close { position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,.4);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s; }
+    .vc-close:hover { background:rgba(0,0,0,.6); }
+    .vc-media { width:100%;height:260px;background:#000;overflow:hidden; }
+    .vc-media img { width:100%;height:100%;object-fit:cover;display:block; }
+    .vc-media iframe { width:100%;height:100%;border:none;display:block; }
+    .vc-body { padding:24px;display:flex;flex-direction:column;gap:12px; }
+    .vc-title { font-size:var(--text-size-title-lg);font-weight:var(--font-weight-bold);color:var(--text);line-height:1.25; }
+    .vc-desc { font-size:var(--text-size-body-lg);color:var(--text-secondary);line-height:1.5; }
+    .vc-cta { margin-top:4px;width:100%;height:48px;background:var(--blue);border-radius:var(--radius-md);color:var(--white);font-size:var(--text-size-body-lg);font-weight:var(--font-weight-bold);font-family:var(--font);border:none;cursor:pointer;transition:background .2s; }
+    .vc-cta:hover { background:var(--blue-hover); }
+    @media(max-width:767px){ .vc-media{height:200px} .vc-body{padding:18px} .vc-title{font-size:var(--text-size-title-md)} }
 
     /* ── FOOTER ── */
     .footer {
@@ -2006,8 +2023,10 @@
   <div class="scroll-outer">
     <div class="scroll-inner">
       <!-- Add data-youtube="VIDEO_ID" to show YouTube video instead of image -->
-      <div class="video-card" data-youtube="https://www.youtube.com/watch?v=jNQXAC9IVRw">
-        <div class="video-card-bg">https://www.youtube.com/watch?v=YRveKTrKvP8</div>
+      <div class="video-card" data-youtube="">
+        <div class="video-card-bg"><img src="./assets/2cb5cdd18a85678da0c2072a20a4d3823ac6c330.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to get the best car insurance quote?</div></div>
       </div>
       <div class="video-card" data-youtube="">
         <div class="video-card-bg"><img src="./assets/910cb488535057e745e95e62484aee4d55bad319.png" alt="" /></div>
@@ -2533,7 +2552,7 @@
 
     // Replace img with iframe
     bg.innerHTML = `<iframe
-      src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&showinfo=0&rel=0&modestbranding=1"
+      src="https:https://www.youtube.com/watch?v=YRveKTrKvP8"
       allow="autoplay; encrypted-media"
       allowfullscreen
     ></iframe>`;
@@ -3349,5 +3368,58 @@ document.addEventListener('keydown', e => {
     <button class="btn-login">Login</button>
   </div>
 </div>
+
+<!-- ── Video popup modal ── -->
+<div class="vc-overlay" id="vc-overlay">
+  <div class="vc-box">
+    <button class="vc-close" id="vc-close"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="15" y2="15"/><line x1="15" y1="3" x2="3" y2="15"/></svg></button>
+    <div class="vc-media" id="vc-media"></div>
+    <div class="vc-body">
+      <div class="vc-title" id="vc-title"></div>
+      <div class="vc-desc" id="vc-desc"></div>
+      <button class="vc-cta">Get quote →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const overlay = document.getElementById('vc-overlay');
+  const media   = document.getElementById('vc-media');
+  const titleEl = document.getElementById('vc-title');
+  const descEl  = document.getElementById('vc-desc');
+
+  function openModal(card) {
+    const youtubeUrl = (card.dataset.youtube || '').trim();
+    titleEl.textContent = card.dataset.title || card.querySelector('.video-card-title')?.textContent || '';
+    descEl.textContent  = card.dataset.desc  || '';
+
+    if (youtubeUrl) {
+      const id = youtubeUrl.match(/(?:v=|youtu\.be\/|embed\/)([^&?/]+)/)?.[1] || youtubeUrl;
+      media.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1" allow="autoplay;encrypted-media" allowfullscreen></iframe>`;
+    } else {
+      const img = card.querySelector('.video-card-bg img');
+      media.innerHTML = img ? `<img src="${img.src}" alt="" />` : '';
+    }
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { media.innerHTML = ''; }, 350);
+  }
+
+  // Delegation — works even if cards are added dynamically
+  document.addEventListener('click', function(e) {
+    const card = e.target.closest('.video-card');
+    if (card) { openModal(card); return; }
+    if (e.target === overlay || e.target.closest('#vc-close')) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+})();
+</script>
+
 </body>
 </html>
