@@ -1987,9 +1987,11 @@
   <div class="container">
     <div class="filter-tabs">
       <button class="ftab active">All</button>
-      <button class="ftab">Comprehensive</button>
-      <button class="ftab">Third party</button>
-      <button class="ftab">Renewals</button>
+      <button class="ftab">Motor</button>
+      <button class="ftab">Health</button>
+      <button class="ftab">Building</button>
+      <button class="ftab">Pet</button>
+      <button class="ftab">Marine</button>
     </div>
   </div>
   <div class="scroll-outer">
@@ -2353,7 +2355,7 @@
           const row = document.createElement('a');
           row.href = '#';
           row.className = 'mobile-sub-item';
-          row.innerHTML = `<span>${cat.label}</span><img src="${cat.icon}" alt="" />`;
+          row.innerHTML = `<img src="${cat.icon}" alt="" /><span>${cat.label}</span>`;
           row.addEventListener('click', e => { e.preventDefault(); closeMenu(); });
           sub.appendChild(row);
         });
