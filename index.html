@@ -508,6 +508,9 @@
       object-position: center bottom;
     }
 
+    /* View all card — mobile only */
+    .ins-card-view-all { display: none; }
+
     /* Extra content — hidden by default, revealed on hover via GSAP */
     .ins-card-extra {
       width: 100%;
@@ -1257,6 +1260,22 @@
       .ins-card:active .ins-card-inner { box-shadow: var(--elevation-sm); }
       .ins-card-inner { padding: var(--padding-16) var(--padding-16); }
       .ins-card-extra { display: none; }
+
+      /* View all card — show on mobile */
+      .ins-card-view-all { display: flex; }
+      .ins-card-view-all-inner {
+        justify-content: center;
+        gap: var(--gap-lg);
+        border: 1.5px dashed var(--blue);
+        background: var(--bg-brand-light);
+      }
+      .ins-card-view-all-icon { display: flex; align-items: center; justify-content: center; }
+      .btn-quote-outline {
+        background: transparent;
+        border: 1.5px solid var(--blue);
+        color: var(--blue);
+      }
+      .btn-quote-outline:hover { background: var(--bg-brand-light); }
       .ins-card-name { font-size: var(--text-size-body-md); }
       .ins-card-img img { max-height: 48px; }
       .ins-card-price { font-size: 10px}
@@ -1713,6 +1732,20 @@
             </div>
           </div>
           <button class="btn-quote">Get quote</button>
+        </div>
+      </div>
+
+      <!-- View all products — mobile only, end of scroll -->
+      <div class="ins-card ins-card-view-all">
+        <div class="ins-card-inner ins-card-view-all-inner">
+          <div class="ins-card-view-all-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="15" stroke="var(--blue)" stroke-width="1.5"/>
+              <path d="M13 10l6 6-6 6" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ins-card-name">View all products</div>
+          <button class="btn-quote btn-quote-outline">Explore</button>
         </div>
       </div>
 
