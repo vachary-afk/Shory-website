@@ -580,8 +580,8 @@
     }
     .ins-card-price {
       font-size: var(--text-size-body-lg);
-      font-weight: var(--font-weight-bold);
-      color: var(--blue);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-secondary);
     }
     .ins-card-desc {
       font-size: var(--text-size-body-sm);
@@ -951,45 +951,49 @@
     .faq-item:last-child { border-bottom: none; }
     .faq-item:hover { background: var(--bg); }
 
-    /* Header row — 12px padding all sides, 12px gap, vertically centered */
+    /* Header row — large: 20px padding, 16px gap */
     .faq-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px;
+      gap: 16px;
+      padding: 20px 24px;
       width: 100%;
+      user-select: none;
     }
 
-    /* Title — 16px bold, matches Figma body/lg */
+    /* Title — large: 20px bold */
     .faq-q {
       flex: 1;
-      font-size: var(--text-size-body-lg);
+      font-size: var(--text-size-title-md);
       font-weight: var(--font-weight-bold);
       color: var(--text);
-      line-height: var(--line-height-md);
+      line-height: var(--line-height-xl);
     }
 
-    /* Chevron icon — 20×20, rotates on open */
+    /* Chevron — 24×24, smooth rotate */
     .faq-chevron {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
       color: var(--text-secondary);
-      transition: transform 0.25s ease;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .faq-item.open .faq-chevron { transform: rotate(180deg); }
 
-    /* Body — 14px regular, 12px padding sides+bottom, hidden when collapsed */
+    /* Body — height animated via GSAP, starts collapsed */
     .faq-body {
-      display: none;
-      padding: 0 12px 12px;
+      overflow: hidden;
+      height: 0;
     }
-    .faq-item.open .faq-body { display: block; }
+    .faq-body-inner {
+      padding: 0 24px 20px;
+    }
+
     .faq-a {
-      font-size: var(--text-size-body-md);
+      font-size: var(--text-size-body-lg);
       font-weight: var(--font-weight-regular);
       color: var(--text-secondary);
-      line-height: var(--line-height-md);
+      line-height: 1.6;
     }
 
     /* ── APP CTA ── */
@@ -1050,10 +1054,10 @@
 
     /* ── MEDIUM DESKTOP 1280–1439px ── */
     @media (max-width: 1439px) {
-      .hero { min-height: 90vh; }
-      .hero-body { height: 90vh; }
+      .hero { min-height: 80vh; }
+      .hero-body { height: 80vh; }
       .hero-title { font-size: 46px; }
-      .hero-subtitle { font-size: 19px; }
+      .hero-subtitle { font-size: 16px; }
     }
 
     /* ── LAPTOP 1024–1279px ── */
@@ -1065,8 +1069,8 @@
       .why-col-r { width: 340px; }
 
       /* Hero adjustments for laptop screens */
-      .hero { min-height: 95vh; }
-      .hero-body { height: 95vh; }
+      .hero { min-height: 80vh; }
+      .hero-body { height: 80vh; }
       .hero-title { font-size: 42px; }
       .hero-subtitle { font-size: 17px; }
     }
@@ -1308,7 +1312,7 @@
       .ins-card.active .ins-card-back { max-height: 0; opacity: 0; margin-bottom: 0; }
       .ins-card-name { font-size: var(--text-size-body-md); }
       .ins-card-img img { max-height: 48px; }
-      .ins-card-price { font-size: var(--text-size-body-md); }
+      .ins-card-price { font-size: 10px}
       .ins-card-desc { font-size: var(--text-size-caption); line-height: var(--line-height-sm); }
 
       /* Trust */
@@ -1679,6 +1683,7 @@
           <!-- Front Side -->
           <div class="ins-card-front">
             <div class="ins-card-name">Car insurance</div>
+            <div class="ins-card-price">Starting from AED 512</div>
             <div class="ins-card-img">
               <img src="./assets/vehicle.png" alt="Car insurance" />
             </div>
@@ -1687,7 +1692,6 @@
           <!-- Back Side -->
           <div class="ins-card-back">
             <div class="ins-card-back-content">
-              <div class="ins-card-price">Starting from AED 512</div>
               <div class="ins-card-desc">Insurance for GCC, Non-GCC, Chinese &amp; EVs.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
@@ -1711,6 +1715,7 @@
         <div class="ins-card-inner">
           <div class="ins-card-front">
             <div class="ins-card-name">Health insurance</div>
+              <div class="ins-card-price">Starting from AED 650</div>
             <div class="ins-card-img">
               <img src="./assets/health.png" alt="Health insurance" />
             </div>
@@ -1718,7 +1723,6 @@
           </div>
           <div class="ins-card-back">
             <div class="ins-card-back-content">
-              <div class="ins-card-price">Starting from AED 650</div>
               <div class="ins-card-desc">Plans for individuals, families &amp; employees.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
@@ -1742,6 +1746,7 @@
         <div class="ins-card-inner">
           <div class="ins-card-front">
             <div class="ins-card-name">Home insurance</div>
+              <div class="ins-card-price">Starting from AED 450</div>
             <div class="ins-card-img">
               <img src="./assets/building.png" alt="Home insurance" />
             </div>
@@ -1749,7 +1754,6 @@
           </div>
           <div class="ins-card-back">
             <div class="ins-card-back-content">
-              <div class="ins-card-price">Starting from AED 450</div>
               <div class="ins-card-desc">Protect your home &amp; belongings, all year round.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
@@ -1773,14 +1777,12 @@
         <div class="ins-card-inner">
           <div class="ins-card-front">
             <div class="ins-card-name">Pet insurance</div>
+              <div class="ins-card-price">Starting from AED 320</div>
             <div class="ins-card-img">
               <img src="./assets/pet.png" alt="Pet insurance" />
             </div>
-            <button class="btn-quote">Get quote</button>
-          </div>
           <div class="ins-card-back">
             <div class="ins-card-back-content">
-              <div class="ins-card-price">Starting from AED 320</div>
               <div class="ins-card-desc">Vet bills, accidents &amp; illness covered for your pet.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
@@ -1795,6 +1797,8 @@
                 </div>
               </div>
             </div>
+            <button class="btn-quote">Get quote</button>
+          </div>
             <button class="btn-quote">Get quote</button>
           </div>
         </div>
@@ -1886,6 +1890,8 @@
                 <img src="./assets/34bf2d8072fa028eec5aa550a325ac4398be383c.png" alt="" />
                 <img src="./assets/4ae6aec98f08d589e7801d4d0e50cd6c1f538328.png" alt="" />
                 <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
+                <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
+                <img src="./assets/ffb3bc751a1e91e8b288e076f08a88b6e6db91b6.png" alt="" />
                 <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
               </div>
             </div>
@@ -2105,7 +2111,7 @@
           <div class="faq-q">What is car insurance?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">Car insurance is like a safety net that covers expenses related to damages or injuries resulting from a car accident, ensuring you're financially safe in case of a mishap.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">Car insurance is like a safety net that covers expenses related to damages or injuries resulting from a car accident, ensuring you're financially safe in case of a mishap.</p></div></div>
       </div>
 
       <div class="faq-item" role="listitem">
@@ -2113,7 +2119,7 @@
           <div class="faq-q">How does Shory Car Insurance work?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">Shory lets you compare quotes from 30+ insurers instantly, choose your coverage, and get insured entirely online in minutes.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">Shory lets you compare quotes from 30+ insurers instantly, choose your coverage, and get insured entirely online in minutes.</p></div></div>
       </div>
 
       <div class="faq-item" role="listitem">
@@ -2121,7 +2127,7 @@
           <div class="faq-q">Which insurance companies does Shory work with?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">Shory partners with 30+ of the UAE's top-rated insurance providers to give you the widest range of options.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">Shory partners with 30+ of the UAE's top-rated insurance providers to give you the widest range of options.</p></div></div>
       </div>
 
       <div class="faq-item" role="listitem">
@@ -2129,7 +2135,7 @@
           <div class="faq-q">What types of car insurance are available through Shory?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">Comprehensive, third-party, and specialized options for GCC, Non-GCC, Chinese vehicles, and EVs.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">Comprehensive, third-party, and specialized options for GCC, Non-GCC, Chinese vehicles, and EVs.</p></div></div>
       </div>
 
       <div class="faq-item" role="listitem">
@@ -2137,7 +2143,7 @@
           <div class="faq-q">Can I buy car insurance and pay later?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">Yes! Shory supports flexible payments via Tabby, Apple Pay, and other options so you can split your premium.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">Yes! Shory supports flexible payments via Tabby, Apple Pay, and other options so you can split your premium.</p></div></div>
       </div>
 
       <div class="faq-item" role="listitem">
@@ -2145,7 +2151,7 @@
           <div class="faq-q">How do I file a claim with Shory?</div>
           <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <div class="faq-body"><p class="faq-a">File a claim 24/7 through the Shory app or website. Our claims team is available around the clock to assist you.</p></div>
+        <div class="faq-body"><div class="faq-body-inner"><p class="faq-a">File a claim 24/7 through the Shory app or website. Our claims team is available around the clock to assist you.</p></div></div>
       </div>
 
     </div>
@@ -2378,20 +2384,47 @@
   }, { passive: true });
 
   // FAQ accordion
-  document.querySelectorAll('.faq-header').forEach(header => {
-    header.addEventListener('click', () => {
-      const item = header.closest('.faq-item');
-      const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(i => {
-        i.classList.remove('open');
-        i.querySelector('.faq-header').setAttribute('aria-expanded', 'false');
-      });
-      if (!wasOpen) {
+  // FAQ accordion — GSAP height animation
+  (() => {
+    const items = document.querySelectorAll('.faq-item');
+
+    function openItem(item) {
+      const body = item.querySelector('.faq-body');
+      const header = item.querySelector('.faq-header');
+      item.classList.add('open');
+      header.setAttribute('aria-expanded', 'true');
+      gsap.to(body, { height: 'auto', duration: 0.4, ease: 'power3.out' });
+    }
+
+    function closeItem(item) {
+      const body = item.querySelector('.faq-body');
+      const header = item.querySelector('.faq-header');
+      item.classList.remove('open');
+      header.setAttribute('aria-expanded', 'false');
+      gsap.to(body, { height: 0, duration: 0.35, ease: 'power3.inOut' });
+    }
+
+    // Set first item open on load
+    items.forEach((item, i) => {
+      const body = item.querySelector('.faq-body');
+      if (i === 0) {
         item.classList.add('open');
-        header.setAttribute('aria-expanded', 'true');
+        gsap.set(body, { height: 'auto' });
+      } else {
+        gsap.set(body, { height: 0 });
       }
     });
-  });
+
+    items.forEach(item => {
+      item.querySelector('.faq-header').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        // Close all
+        items.forEach(i => { if (i.classList.contains('open')) closeItem(i); });
+        // Open clicked if it was closed
+        if (!isOpen) openItem(item);
+      });
+    });
+  })();
 
   // Filter tabs
   document.querySelectorAll('.filter-tabs').forEach(group => {
