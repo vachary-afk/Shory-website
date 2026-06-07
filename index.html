@@ -926,17 +926,71 @@
     .testi-body { font-size: var(--text-size-body-lg); font-weight: var(--font-weight-regular); color: var(--text-secondary); line-height: 1.18; }
 
     /* ── FAQ ── */
+    /* ── FAQ Accordion — based on Figma DS node 57106-139 ── */
     .faq-head { text-align: center; margin-bottom: var(--gap-4xl); }
     .faq-head .sec-title { max-width: 764px; margin: 0 auto var(--gap-md); }
     .faq-head-sub { font-size: var(--text-size-title-md); font-weight: var(--font-weight-regular); color: var(--text); max-width: 838px; margin: 0 auto; line-height: 1.4; }
-    .faq-box { background: var(--card); border: var(--border-width) solid var(--border); border-radius: var(--radius-2xl); padding: var(--gap-2xl) var(--padding-16); margin-bottom: var(--gap-2xl); }
-    .faq-item { padding: var(--padding-24); border-bottom: var(--border-width) solid var(--border); display: flex; gap: var(--gap-xl); align-items: flex-start; cursor: pointer; }
+
+    .faq-box {
+      background: var(--card);
+      border: var(--border-width) solid var(--border-3);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: var(--gap-2xl);
+    }
+
+    /* Accordion item — matches Figma: border-bottom, no outer padding */
+    .faq-item {
+      display: flex;
+      flex-direction: column;
+      border-bottom: var(--border-width) solid var(--border-3);
+      cursor: pointer;
+      background: var(--card);
+      transition: background 0.15s;
+    }
     .faq-item:last-child { border-bottom: none; }
-    .faq-q { font-size: var(--text-size-title-lg); font-weight: var(--font-weight-bold); color: var(--text); line-height: 1.25; }
-    .faq-a { font-size: var(--text-size-title-md); font-weight: var(--font-weight-regular); color: var(--text-secondary); line-height: var(--line-height-lg); margin-top: var(--gap-md); display: none; }
-    .faq-item.open .faq-a { display: block; }
-    .faq-icon { width: 24px; height: 24px; flex-shrink: 0; transition: transform 0.25s; transform: rotate(90deg); }
-    .faq-item.open .faq-icon { transform: rotate(-90deg) scaleY(-1); }
+    .faq-item:hover { background: var(--bg); }
+
+    /* Header row — 12px padding all sides, 12px gap, vertically centered */
+    .faq-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      width: 100%;
+    }
+
+    /* Title — 16px bold, matches Figma body/lg */
+    .faq-q {
+      flex: 1;
+      font-size: var(--text-size-body-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text);
+      line-height: var(--line-height-md);
+    }
+
+    /* Chevron icon — 20×20, rotates on open */
+    .faq-chevron {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+      transition: transform 0.25s ease;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    /* Body — 14px regular, 12px padding sides+bottom, hidden when collapsed */
+    .faq-body {
+      display: none;
+      padding: 0 12px 12px;
+    }
+    .faq-item.open .faq-body { display: block; }
+    .faq-a {
+      font-size: var(--text-size-body-md);
+      font-weight: var(--font-weight-regular);
+      color: var(--text-secondary);
+      line-height: var(--line-height-md);
+    }
 
     /* ── APP CTA ── */
     .app-cta {
@@ -1435,7 +1489,6 @@
         font-size: var(--text-size-body-md);
         line-height: 1.45;
       }
-      .faq-icon { width: 20px; height: 20px; }
 
       /* App CTA */
       .app-cta {
@@ -2045,34 +2098,56 @@
       <p class="faq-head-sub">Here you'll find answers to most of the questions and inquiries related to Shory. If you still need help, you can send your inquiry or contact customer service anytime on the number XXXXX</p>
     </div>
 
-    <div class="faq-box">
-      <div class="faq-item open">
-        <div class="faq-col">
+    <div class="faq-box" role="list">
+
+      <div class="faq-item open" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="true">
           <div class="faq-q">What is car insurance?</div>
-          <div class="faq-a">Car insurance is like a safety net that covers expenses related to damages or injuries resulting from a car accident, ensuring you're financially safe in case of a mishap.</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
         </div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+        <div class="faq-body"><p class="faq-a">Car insurance is like a safety net that covers expenses related to damages or injuries resulting from a car accident, ensuring you're financially safe in case of a mishap.</p></div>
       </div>
-      <div class="faq-item">
-        <div class="faq-col"><div class="faq-q">How does Shory Car Insurance work?</div><div class="faq-a">Shory lets you compare quotes from 30+ insurers instantly, choose your coverage, and get insured entirely online in minutes.</div></div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+
+      <div class="faq-item" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="false">
+          <div class="faq-q">How does Shory Car Insurance work?</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+        </div>
+        <div class="faq-body"><p class="faq-a">Shory lets you compare quotes from 30+ insurers instantly, choose your coverage, and get insured entirely online in minutes.</p></div>
       </div>
-      <div class="faq-item">
-        <div class="faq-col"><div class="faq-q">Which insurance companies does Shory work with?</div><div class="faq-a">Shory partners with 30+ of the UAE's top-rated insurance providers to give you the widest range of options.</div></div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+
+      <div class="faq-item" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="false">
+          <div class="faq-q">Which insurance companies does Shory work with?</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+        </div>
+        <div class="faq-body"><p class="faq-a">Shory partners with 30+ of the UAE's top-rated insurance providers to give you the widest range of options.</p></div>
       </div>
-      <div class="faq-item">
-        <div class="faq-col"><div class="faq-q">What types of car insurance are available through Shory?</div><div class="faq-a">Comprehensive, third-party, and specialized options for GCC, Non-GCC, Chinese vehicles, and EVs.</div></div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+
+      <div class="faq-item" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="false">
+          <div class="faq-q">What types of car insurance are available through Shory?</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+        </div>
+        <div class="faq-body"><p class="faq-a">Comprehensive, third-party, and specialized options for GCC, Non-GCC, Chinese vehicles, and EVs.</p></div>
       </div>
-      <div class="faq-item">
-        <div class="faq-col"><div class="faq-q">Can I buy car insurance and pay later?</div><div class="faq-a">Yes! Shory supports flexible payments via Tabby, Apple Pay, and other options so you can split your premium.</div></div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+
+      <div class="faq-item" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="false">
+          <div class="faq-q">Can I buy car insurance and pay later?</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+        </div>
+        <div class="faq-body"><p class="faq-a">Yes! Shory supports flexible payments via Tabby, Apple Pay, and other options so you can split your premium.</p></div>
       </div>
-      <div class="faq-item">
-        <div class="faq-col"><div class="faq-q">How do I file a claim with Shory?</div><div class="faq-a">File a claim 24/7 through the Shory app or website. Our claims team is available around the clock to assist you.</div></div>
-        <img class="faq-icon" src="./assets/d3d114c2d180f623e8e886c244086ca19844e6d5.svg" alt="" />
+
+      <div class="faq-item" role="listitem">
+        <div class="faq-header" role="button" aria-expanded="false">
+          <div class="faq-q">How do I file a claim with Shory?</div>
+          <svg class="faq-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+        </div>
+        <div class="faq-body"><p class="faq-a">File a claim 24/7 through the Shory app or website. Our claims team is available around the clock to assist you.</p></div>
       </div>
+
     </div>
 
     <!-- App CTA -->
@@ -2303,11 +2378,18 @@
   }, { passive: true });
 
   // FAQ accordion
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.addEventListener('click', () => {
+  document.querySelectorAll('.faq-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.closest('.faq-item');
       const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-header').setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        item.classList.add('open');
+        header.setAttribute('aria-expanded', 'true');
+      }
     });
   });
 
