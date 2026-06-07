@@ -853,6 +853,27 @@
     }
     @media (max-width: 1023px) { .scroll-inner { padding: 0 32px; } }
     @media (max-width: 767px)  { .scroll-inner { padding: 0 20px; } }
+    /* ── Original video card (Choose the right insurance) ── */
+    .video-card {
+      width: 397px; height: 477px; border-radius: var(--radius-2xl); overflow: hidden;
+      position: relative; background: var(--text); flex-shrink: 0; cursor: pointer;
+    }
+    .video-card-bg { position: absolute; inset: 0; }
+    .video-card-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .video-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.75) 100%);
+    }
+    .vid-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      z-index: 2; width: 53px; height: 53px; border-radius: var(--radius-full);
+      border: 2px solid var(--white); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .vid-play img { width: 22px; height: 22px; }
+    .video-card-text { position: absolute; bottom: 36px; left: 36px; right: 36px; z-index: 2; }
+    .video-card-title { font-size: var(--text-size-title-md); font-weight: var(--font-weight-bold); color: var(--white); line-height: var(--line-height-lg); }
+
     /* ── Article Card — Figma DS node 57949-707 ── */
     .vid-card {
       background: var(--card);
@@ -1477,6 +1498,9 @@
       .scroll-inner { gap: var(--gap-lg); }
       .vid-card { width: min(78vw, 260px); }
       .vid-card-slot { height: 130px; }
+      .video-card { width: min(78vw, 292px); height: 350px; border-radius: var(--radius-xl); }
+      .video-card-text { bottom: 24px; left: 24px; right: 24px; }
+      .video-card-title { font-size: var(--text-size-body-lg); }
       .vid-title { font-size: var(--text-size-body-lg); }
 
       /* Testimonials */
@@ -1969,51 +1993,31 @@
     </div>
   </div>
   <div class="scroll-outer">
-    <div class="scroll-inner" style="padding: 4px 80px 8px;">
-      <div class="vid-card">
-        <div class="vid-card-slot"><img src="./assets/2cb5cdd18a85678da0c2072a20a4d3823ac6c330.png" alt="" /></div>
-        <div class="vid-card-content">
-          <div class="vid-card-eyebrow">Car Insurance</div>
-          <div class="vid-title">How to get the best car insurance quote?</div>
-          <div class="vid-desc">Compare quotes from top UAE insurers in seconds and find the right coverage for your vehicle.</div>
-        </div>
-        <button class="btn-article">Watch now</button>
+    <div class="scroll-inner">
+      <div class="video-card">
+        <div class="video-card-bg"><img src="./assets/2cb5cdd18a85678da0c2072a20a4d3823ac6c330.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to get the best car insurance quote?</div></div>
       </div>
-      <div class="vid-card">
-        <div class="vid-card-slot"><img src="./assets/910cb488535057e745e95e62484aee4d55bad319.png" alt="" /></div>
-        <div class="vid-card-content">
-          <div class="vid-card-eyebrow">Car Insurance</div>
-          <div class="vid-title">How to transfer your car policy?</div>
-          <div class="vid-desc">Step-by-step guide to transferring your existing car insurance policy to a new vehicle or owner.</div>
-        </div>
-        <button class="btn-article">Watch now</button>
+      <div class="video-card">
+        <div class="video-card-bg"><img src="./assets/910cb488535057e745e95e62484aee4d55bad319.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to transfer your car policy?</div></div>
       </div>
-      <div class="vid-card">
-        <div class="vid-card-slot"><img src="./assets/17569b876dc92db39e816a6d8636c09082b8f472.png" alt="" /></div>
-        <div class="vid-card-content">
-          <div class="vid-card-eyebrow">Claims</div>
-          <div class="vid-title">How to get a claim for your car insurance?</div>
-          <div class="vid-desc">Everything you need to know about filing a car insurance claim quickly and hassle-free.</div>
-        </div>
-        <button class="btn-article">Watch now</button>
+      <div class="video-card">
+        <div class="video-card-bg"><img src="./assets/17569b876dc92db39e816a6d8636c09082b8f472.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to get claim for your car insurance?</div></div>
       </div>
-      <div class="vid-card">
-        <div class="vid-card-slot"><img src="./assets/bd961cbaac04cd285eadc63b187294b3fdc806d8.png" alt="" /></div>
-        <div class="vid-card-content">
-          <div class="vid-card-eyebrow">Car Insurance</div>
-          <div class="vid-title">How to extend your car insurance policy?</div>
-          <div class="vid-desc">Learn how to renew or extend your policy before it expires and avoid coverage gaps.</div>
-        </div>
-        <button class="btn-article">Watch now</button>
+      <div class="video-card">
+        <div class="video-card-bg"><img src="./assets/bd961cbaac04cd285eadc63b187294b3fdc806d8.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to extend your car insurance policy?</div></div>
       </div>
-      <div class="vid-card">
-        <div class="vid-card-slot"><img src="./assets/bc76cec3309a1b10cafe357a4a64cd847ee27d44.png" alt="" /></div>
-        <div class="vid-card-content">
-          <div class="vid-card-eyebrow">Policy</div>
-          <div class="vid-title">How to cancel your insurance policy?</div>
-          <div class="vid-desc">A simple guide to cancelling your insurance policy and understanding your refund options.</div>
-        </div>
-        <button class="btn-article">Watch now</button>
+      <div class="video-card">
+        <div class="video-card-bg"><img src="./assets/bc76cec3309a1b10cafe357a4a64cd847ee27d44.png" alt="" /></div>
+        <div class="vid-play"><img src="./assets/78176e967062db3d280646193e55c7e1fe23c31e.svg" alt="Play" /></div>
+        <div class="video-card-text"><div class="video-card-title">How to Cancel Insurance Policy</div></div>
       </div>
     </div>
   </div>
@@ -2614,7 +2618,7 @@
     });
 
   // Video cards — each individually so both scroll-sec sections animate
-  document.querySelectorAll('.vid-card')
+  document.querySelectorAll('.vid-card, .video-card')
     .forEach((card, i) => {
       gsap.set(card, { willChange: 'transform, opacity' });
       gsap.fromTo(card,
