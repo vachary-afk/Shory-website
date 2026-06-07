@@ -1455,13 +1455,15 @@
         border-radius: var(--radius-xl);
         margin-bottom: var(--padding-24);
       }
-      .faq-item {
-        padding: var(--padding-18, 18px) var(--padding-16);
-        gap: var(--gap-md);
+      .faq-header {
+        padding: 12px 14px;
+        gap: 8px;
       }
-      .faq-q { font-size: var(--text-size-body-lg); }
+      .faq-body-inner { padding: 0 14px 10px; }
+      .faq-q { font-size: var(--text-size-body-md); line-height: 1.35; }
+      .faq-chevron { width: 18px; height: 18px; }
       .faq-a {
-        font-size: var(--text-size-body-md);
+        font-size: var(--text-size-body-sm);
         line-height: 1.45;
       }
 
@@ -2398,8 +2400,10 @@
   };
 
   themeToggle.addEventListener('click', toggleTheme);
-  const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
-  if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+  // Use delegation so it works even if mobile panel is rebuilt in the DOM
+  document.addEventListener('click', e => {
+    if (e.target.closest('#theme-toggle-mobile')) toggleTheme();
+  });
 
   // ── GSAP + Lenis + SplitType setup ──
   gsap.registerPlugin(ScrollTrigger);
