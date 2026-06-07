@@ -471,84 +471,32 @@
     .ins-card {
       flex: 1 1 0;
       min-width: 200px;
-      height: 220px;
       cursor: pointer;
       position: relative;
-      transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s ease;
-    }
-
-    .ins-card.active {
-      height: 352px;
     }
 
     .ins-card-inner {
-      position: relative;
       width: 100%;
-      height: 100%;
       border-radius: var(--radius-xl);
       padding: var(--padding-20) var(--padding-16);
       background: var(--card);
       display: flex;
-      flex-direction: column-reverse;
-      align-items: stretch;
-      justify-content: flex-start;
-      box-shadow: var(--elevation-sm);
-      overflow: hidden;
-      transition: box-shadow 0.3s ease, background 0.3s ease;
-    }
-
-    .ins-card-front,
-    .ins-card-back {
-      width: 100%;
-      display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      gap: 6px;
+      box-shadow: var(--elevation-sm);
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
     }
 
     .ins-card:hover .ins-card-inner {
       box-shadow: var(--elevation-md);
     }
 
-    .ins-card-front {
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .ins-card:not(.active) .ins-card-front {
-      height: 100%;
-      justify-content: space-between;
-    }
-
-    .ins-card.active .ins-card-front {
-      height: 180px;
-      justify-content: space-between;
-    }
-
-    .ins-card-back {
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      justify-content: flex-start;
-      gap: var(--gap-md);
-      transform: translateY(12px);
-      transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), margin-bottom 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .ins-card.active .ins-card-back {
-      max-height: 120px;
-      opacity: 1;
-      transform: translateY(0);
-      margin-bottom: var(--gap-md);
-    }
-
-    .ins-card-back > .btn-quote {
-      display: none;
-    }
-
     .ins-card-name {
       font-size: var(--text-size-body-lg); font-weight: var(--font-weight-bold); color: var(--text-common);
       text-align: center; line-height: var(--line-height-md);
+      width: 100%;
     }
 
     .ins-card-img {
@@ -559,25 +507,31 @@
       width: 95%; height: 95%; object-fit: contain;
       object-position: center bottom;
     }
+
+    /* Extra content — hidden by default, revealed on hover via GSAP */
+    .ins-card-extra {
+      width: 100%;
+      height: 0;
+      overflow: hidden;
+    }
+    .ins-card-extra-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--gap-sm);
+      text-align: center;
+      padding-top: var(--gap-sm);
+    }
+
     .ins-card .btn-quote {
       width: 100%; background: var(--blue); border-radius: var(--radius-md);
       color: var(--white); font-size: var(--text-size-body-md); font-weight: var(--font-weight-medium);
       height: 40px; padding: 0 var(--padding-16);
       cursor: pointer;
       transition: background 0.2s ease;
+      margin-top: var(--gap-sm);
     }
-    .ins-card .btn-quote:hover {
-      background: var(--blue-hover);
-    }
-
-    /* Card back content */
-    .ins-card-back-content {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap-sm);
-      text-align: center;
-    }
+    .ins-card .btn-quote:hover { background: var(--blue-hover); }
     .ins-card-price {
       font-size: var(--text-size-body-sm);
       font-weight: var(--font-weight-medium);
@@ -590,7 +544,7 @@
       line-height: var(--line-height-md);
     }
     .ins-card-pay-label {
-      font-size: var(--text-size-caption);
+      font-size: 10px;
       font-weight: var(--font-weight-medium);
       color: var(--text-secondary);
       margin-top: var(--gap-sm);
@@ -1299,17 +1253,10 @@
         left: 0; transform: none; bottom: 12px;
       }
       .ins-cards-row::-webkit-scrollbar { display: none; }
-      .ins-card { min-width: 158px; flex: 0 0 158px; height: 175px; transition: none; }
-      .ins-card.active { height: 175px; }
-      .ins-card:hover .ins-card-inner,
-      .ins-card:active .ins-card-inner { box-shadow: var(--elevation-sm); transform: none; }
+      .ins-card { min-width: 158px; flex: 0 0 158px; }
+      .ins-card:active .ins-card-inner { box-shadow: var(--elevation-sm); }
       .ins-card-inner { padding: var(--padding-16) var(--padding-16); }
-      .ins-card.active .ins-card-front,
-      .ins-card:not(.active) .ins-card-front {
-        height: 100%;
-        justify-content: space-between;
-      }
-      .ins-card.active .ins-card-back { max-height: 0; opacity: 0; margin-bottom: 0; }
+      .ins-card-extra { display: none; }
       .ins-card-name { font-size: var(--text-size-body-md); }
       .ins-card-img img { max-height: 48px; }
       .ins-card-price { font-size: 10px}
@@ -1552,7 +1499,6 @@
       .hero-title { font-size: 27px; }
       .hero-subtitle { font-size: var(--text-size-body-md); }
       .ins-card { min-width: 148px; flex-basis: 148px; }
-      .ins-card.active { height: 196px; }
       .trust-item, .trust-cbuae { padding: var(--padding-14) var(--padding-8); }
       .trust-num { font-size: var(--text-size-title-sm); }
       .trust-lbl { font-size: 11px; }
@@ -1677,132 +1623,99 @@
 
     <!-- Insurance cards -->
     <div class="ins-cards-row" id="ins-cards">
+
       <!-- Car -->
-      <div class="ins-card active">
+      <div class="ins-card">
         <div class="ins-card-inner">
-          <!-- Front Side -->
-          <div class="ins-card-front">
-            <div class="ins-card-name">Car insurance</div>
-            <div class="ins-card-price">Starting from AED 512</div>
-            <div class="ins-card-img">
-              <img src="./assets/vehicle.png" alt="Car insurance" />
-            </div>
-            <button class="btn-quote">Get quote</button>
+          <div class="ins-card-name">Car insurance</div>
+              <div class="ins-card-price">Starting from AED 512</div>
+          <div class="ins-card-img">
+            <img src="./assets/vehicle.png" alt="Car insurance" />
           </div>
-          <!-- Back Side -->
-          <div class="ins-card-back">
-            <div class="ins-card-back-content">
+          <div class="ins-card-extra">
+            <div class="ins-card-extra-inner">
               <div class="ins-card-desc">Insurance for GCC, Non-GCC, Chinese &amp; EVs.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
-                <div class="pay-badge pay-badge-green">
-                  <img src="./assets/tabby.svg" alt="Tabby" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/apple-pay.svg" alt="Apple Pay" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/visa.svg" alt="VISA" />
-                </div>
+                <div class="pay-badge pay-badge-green"><img src="./assets/tabby.svg" alt="Tabby" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/apple-pay.svg" alt="Apple Pay" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/visa.svg" alt="VISA" /></div>
               </div>
             </div>
-            <button class="btn-quote">Get quote</button>
           </div>
+          <button class="btn-quote">Get quote</button>
         </div>
       </div>
+
       <!-- Health -->
       <div class="ins-card">
         <div class="ins-card-inner">
-          <div class="ins-card-front">
-            <div class="ins-card-name">Health insurance</div>
-              <div class="ins-card-price">Starting from AED 650</div>
-            <div class="ins-card-img">
-              <img src="./assets/health.png" alt="Health insurance" />
-            </div>
-            <button class="btn-quote">Get quote</button>
+          <div class="ins-card-name">Health insurance</div>
+          <div class="ins-card-price">Starting from AED 650</div>
+          <div class="ins-card-img">
+            <img src="./assets/health.png" alt="Health insurance" />
           </div>
-          <div class="ins-card-back">
-            <div class="ins-card-back-content">
+          <div class="ins-card-extra">
+            <div class="ins-card-extra-inner">
               <div class="ins-card-desc">Plans for individuals, families &amp; employees.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
-                <div class="pay-badge pay-badge-green">
-                  <img src="./assets/tabby.svg" alt="Tabby" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/apple-pay.svg" alt="Apple Pay" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/visa.svg" alt="VISA" />
-                </div>
+                <div class="pay-badge pay-badge-green"><img src="./assets/tabby.svg" alt="Tabby" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/apple-pay.svg" alt="Apple Pay" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/visa.svg" alt="VISA" /></div>
               </div>
             </div>
-            <button class="btn-quote">Get quote</button>
           </div>
+          <button class="btn-quote">Get quote</button>
         </div>
       </div>
+
       <!-- Home -->
       <div class="ins-card">
         <div class="ins-card-inner">
-          <div class="ins-card-front">
-            <div class="ins-card-name">Home insurance</div>
-              <div class="ins-card-price">Starting from AED 450</div>
-            <div class="ins-card-img">
-              <img src="./assets/building.png" alt="Home insurance" />
-            </div>
-            <button class="btn-quote">Get quote</button>
+          <div class="ins-card-name">Home insurance</div>
+          <div class="ins-card-price">Starting from AED 320</div>
+          <div class="ins-card-img">
+            <img src="./assets/building.png" alt="Home insurance" />
           </div>
-          <div class="ins-card-back">
-            <div class="ins-card-back-content">
+          <div class="ins-card-extra">
+            <div class="ins-card-extra-inner">
               <div class="ins-card-desc">Protect your home &amp; belongings, all year round.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
-                <div class="pay-badge pay-badge-green">
-                  <img src="./assets/tabby.svg" alt="Tabby" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/apple-pay.svg" alt="Apple Pay" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/visa.svg" alt="VISA" />
-                </div>
+                <div class="pay-badge pay-badge-green"><img src="./assets/tabby.svg" alt="Tabby" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/apple-pay.svg" alt="Apple Pay" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/visa.svg" alt="VISA" /></div>
               </div>
             </div>
-            <button class="btn-quote">Get quote</button>
           </div>
+          <button class="btn-quote">Get quote</button>
         </div>
       </div>
+
       <!-- Pet -->
       <div class="ins-card">
         <div class="ins-card-inner">
-          <div class="ins-card-front">
-            <div class="ins-card-name">Pet insurance</div>
-              <div class="ins-card-price">Starting from AED 320</div>
-            <div class="ins-card-img">
-              <img src="./assets/pet.png" alt="Pet insurance" />
-            </div>
-          <div class="ins-card-back">
-            <div class="ins-card-back-content">
+          <div class="ins-card-name">Pet insurance</div>
+          <div class="ins-card-price">Starting from AED 320</div>
+          <div class="ins-card-img">
+            <img src="./assets/pet.png" alt="Pet insurance" />
+          </div>
+          <div class="ins-card-extra">
+            <div class="ins-card-extra-inner">
               <div class="ins-card-desc">Vet bills, accidents &amp; illness covered for your pet.</div>
               <div class="ins-card-pay-label">Flexible payment options</div>
               <div class="pay-badges">
-                <div class="pay-badge pay-badge-green">
-                  <img src="./assets/tabby.svg" alt="Tabby" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/apple-pay.svg" alt="Apple Pay" />
-                </div>
-                <div class="pay-badge pay-badge-neutral">
-                  <img src="./assets/visa.svg" alt="VISA" />
-                </div>
+                <div class="pay-badge pay-badge-green"><img src="./assets/tabby.svg" alt="Tabby" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/apple-pay.svg" alt="Apple Pay" /></div>
+                <div class="pay-badge pay-badge-neutral"><img src="./assets/visa.svg" alt="VISA" /></div>
               </div>
             </div>
-            <button class="btn-quote">Get quote</button>
           </div>
-            <button class="btn-quote">Get quote</button>
-          </div>
+          <button class="btn-quote">Get quote</button>
         </div>
       </div>
+
     </div>
   </div><!-- /hero-body -->
 </section>
@@ -2352,36 +2265,6 @@
     }, { passive: true });
   })();
 
-  // ── Insurance card expand on hover (only one card active at a time) ──
-  const insCards = document.querySelectorAll('#ins-cards .ins-card');
-  const isMobileCards = () => window.matchMedia('(max-width: 767px)').matches;
-
-  if (insCards.length > 0) {
-    if (isMobileCards()) {
-      insCards.forEach(c => c.classList.remove('active'));
-    } else {
-      insCards[0].classList.add('active');
-    }
-  }
-
-  insCards.forEach(card => {
-    const activateCard = () => {
-      if (isMobileCards()) return;
-      insCards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-    };
-
-    card.addEventListener('mouseenter', activateCard);
-    card.addEventListener('click', activateCard);
-  });
-
-  window.addEventListener('resize', () => {
-    if (isMobileCards()) {
-      insCards.forEach(c => c.classList.remove('active'));
-    } else if (insCards.length && !document.querySelector('#ins-cards .ins-card.active')) {
-      insCards[0].classList.add('active');
-    }
-  }, { passive: true });
 
   // FAQ accordion
   // FAQ accordion — GSAP height animation
@@ -2548,16 +2431,22 @@
       });
   })();
 
-  // ── Hero card hover micro-animations ──
+  // ── Insurance card hover: reveal extra content between image and CTA ──
   document.querySelectorAll('#ins-cards .ins-card').forEach(card => {
+    const extra = card.querySelector('.ins-card-extra');
     const img = card.querySelector('.ins-card-img img');
+
+    // Initialise all extras at height 0
+    gsap.set(extra, { height: 0, opacity: 0 });
+
     card.addEventListener('mouseenter', () => {
-      gsap.to(card, { y: -5, scale: 1.03, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
-      if (img) gsap.to(img, { y: -4, scale: 1.08, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to(extra, { height: 'auto', opacity: 1, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+      if (img) gsap.to(img, { y: -4, scale: 1.06, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
     });
+
     card.addEventListener('mouseleave', () => {
-      gsap.to(card, { y: 0, scale: 1, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
-      if (img) gsap.to(img, { y: 0, scale: 1, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to(extra, { height: 0, opacity: 0, duration: 0.3, ease: 'power3.inOut', overwrite: 'auto' });
+      if (img) gsap.to(img, { y: 0, scale: 1, duration: 0.35, ease: 'power3.out', overwrite: 'auto' });
     });
   });
 
