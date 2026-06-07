@@ -1827,7 +1827,6 @@
         <div class="why-card why-card-tall why-card-full">
           <div class="why-inner">
             <div class="why-info-row">
-              1
               <div class="avatars-row">
                 <img src="./assets/ffb3bc751a1e91e8b288e076f08a88b6e6db91b6.png" alt="" />
                 <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
@@ -2448,9 +2447,10 @@
   });
 
   // ── Why Shory section ──
-  animateHeading('.why-section .sec-title');
-  animateText('.why-section .sec-sub');
-  animateCards('.why-section .why-card');
+  // ── Why choose Shory ──
+  animateHeading('.section .sec-title');
+  animateText('.section .sec-sub');
+  animateCards('.why-card');
 
   // ── Trust bar ──
   animateCards([...document.querySelectorAll('.trust-item'), ...document.querySelectorAll('.trust-cbuae')]);
@@ -2478,9 +2478,9 @@
     });
   });
 
-  // ── Choose the right insurance section ──
-  animateHeading('.scroll-sec-title');
-  animateText('.scroll-sec-sub');
+  // ── Choose the right insurance (Recent articles) ──
+  animateHeading('.scroll-sec .scroll-sec-title');
+  animateText('.scroll-sec .scroll-sec-sub');
   animateCards('.vid-card');
 
   // ── Testimonials ──
