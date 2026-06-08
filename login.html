@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log in — Shory</title>
   <style>
-    /* ── Design Tokens (mirrored from main site) ── */
     :root {
       --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --blue: #1d68ff;
@@ -16,241 +15,80 @@
       --white: #ffffff;
       --bg: #f5f6f9;
       --card: #ffffff;
-      --border: #bec0ca;
+      --border: #d5d6dd;
       --border-3: #e3e4e8;
-      --radius-sm: 8px;
       --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 24px;
       --radius-full: 999px;
-      --elevation-sm: 0 1px 3px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.08);
-      --elevation-md: 0 4px 12px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.08);
-      --elevation-lg: 0 8px 32px rgba(0,0,0,0.12), 0 16px 48px rgba(0,0,0,0.08);
-      --color-star: #f5a623;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: var(--font); background: var(--white); color: var(--text); }
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--text);
+    }
     a { text-decoration: none; color: inherit; }
-    button { font-family: var(--font); cursor: pointer; border: none; }
+    button { font-family: var(--font); cursor: pointer; border: none; outline: none; }
     input { font-family: var(--font); }
 
-    /* ── Layout ── */
-    .login-page {
-      display: grid;
-      grid-template-columns: 1fr 480px;
+    /* ── Page shell ── */
+    .page {
       min-height: 100vh;
-    }
-
-    /* ── LEFT: Hero visual ── */
-    .hero-side {
-      background: linear-gradient(135deg, #0a0f1e 0%, #0d1f3d 50%, #0a1628 100%);
-      position: relative;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      padding: 48px 56px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 20px 32px;
     }
 
-    /* Subtle grid pattern */
-    .hero-side::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(29,104,255,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(29,104,255,0.08) 1px, transparent 1px);
-      background-size: 48px 48px;
+    /* Back link */
+    .back-btn {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 500;
+      background: none;
+      transition: color 0.15s;
     }
+    .back-btn:hover { color: var(--text); }
+    .back-btn svg { flex-shrink: 0; }
 
-    .hero-logo {
-      position: relative;
-      z-index: 2;
-      height: 32px;
-      width: auto;
-      filter: brightness(0) invert(1);
-    }
-
-    .hero-headline {
-      position: relative;
-      z-index: 2;
-      margin-top: auto;
-      padding-bottom: 8px;
-    }
-    .hero-headline h1 {
-      font-size: 52px;
-      font-weight: 800;
-      line-height: 1.12;
-      color: var(--white);
-      letter-spacing: -1px;
-    }
-    .hero-headline h1 span { color: var(--blue); }
-    .hero-headline p {
-      margin-top: 14px;
-      font-size: 17px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.5;
+    /* ── Form card ── */
+    .form-wrap {
+      width: 100%;
       max-width: 400px;
-    }
-
-    /* Floating UI cards */
-    .floats {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* Insurance product card floating */
-    .float-card {
-      position: absolute;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius-xl);
-      padding: 16px 18px;
       display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--white);
-    }
-    .float-card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--radius-md);
-      background: rgba(29,104,255,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .float-card-icon img { width: 28px; height: 28px; object-fit: contain; }
-    .float-card-label { font-size: 13px; opacity: 0.7; margin-bottom: 2px; }
-    .float-card-value { font-size: 15px; font-weight: 700; }
-
-    .float-card-1 {
-      top: 120px; right: 56px;
-      width: 200px;
-      animation: floatUp 4s ease-in-out infinite;
-    }
-    .float-card-2 {
-      top: 210px; left: 56px;
-      width: 190px;
-      animation: floatUp 4s ease-in-out infinite 1.2s;
-    }
-    .float-card-3 {
-      top: 340px; right: 80px;
-      width: 195px;
-      animation: floatUp 4s ease-in-out infinite 0.6s;
-    }
-    .float-card-4 {
-      top: 440px; left: 72px;
-      width: 185px;
-      animation: floatUp 4s ease-in-out infinite 1.8s;
-    }
-
-    /* Badge: rating */
-    .float-badge {
-      position: absolute;
-      background: rgba(255,255,255,0.10);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: var(--radius-full);
-      padding: 10px 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--white);
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .float-badge-star { color: var(--color-star); font-size: 15px; }
-
-    .float-badge-1 { top: 72px; left: 50%; transform: translateX(-50%); animation: floatUp 4s ease-in-out infinite 0.4s; }
-    .float-badge-2 { bottom: 160px; right: 56px; animation: floatUp 4s ease-in-out infinite 2s; }
-    .float-badge-3 { bottom: 220px; left: 56px; animation: floatUp 4s ease-in-out infinite 1s; }
-
-    /* Glow orbs */
-    .glow {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
-    .glow-1 { width: 320px; height: 320px; background: rgba(29,104,255,0.25); top: 10%; left: 20%; }
-    .glow-2 { width: 200px; height: 200px; background: rgba(139,92,246,0.2); bottom: 20%; right: 15%; }
-
-    @keyframes floatUp {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    /* Avatars row */
-    .hero-avatars {
-      position: relative;
-      z-index: 2;
-      display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 0;
-      margin-top: 28px;
-    }
-    .hero-avatars img {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3);
-      object-fit: cover;
-      margin-right: -10px;
-    }
-    .hero-avatars img:last-child { margin-right: 0; }
-    .hero-avatars-label {
-      margin-left: 18px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-    }
-    .hero-avatars-label strong { color: var(--white); }
-
-    /* ── RIGHT: Form side ── */
-    .form-side {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 48px 56px;
-      background: var(--white);
-      border-left: 1px solid var(--border-3);
+      padding: 0;
+      margin: auto;
     }
 
-    .form-logo {
-      height: 28px;
-      width: auto;
-      margin-bottom: 48px;
-      display: block;
+    /* Lock icon */
+    .lock-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
     }
 
     .form-title {
       font-size: 26px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text);
-      margin-bottom: 8px;
-    }
-    .form-sub {
-      font-size: 15px;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
     }
 
-    .form-group { margin-bottom: 16px; }
-    .form-label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+    /* Input */
     .form-input {
       width: 100%;
-      height: 48px;
+      height: 52px;
       padding: 0 16px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
@@ -258,217 +96,162 @@
       color: var(--text);
       background: var(--white);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 12px;
     }
     .form-input::placeholder { color: #adb0be; }
-    .form-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29,104,255,0.12); }
-
-    .form-forgot {
-      text-align: right;
-      margin-top: -10px;
-      margin-bottom: 24px;
+    .form-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(29,104,255,0.12);
     }
-    .form-forgot a {
-      font-size: 13px;
-      color: var(--blue);
-      font-weight: 500;
-    }
-    .form-forgot a:hover { text-decoration: underline; }
 
-    .btn-login {
+    /* Continue button */
+    .btn-continue {
       width: 100%;
-      height: 50px;
+      height: 52px;
       background: var(--blue);
       color: var(--white);
       border-radius: var(--radius-md);
       font-size: 16px;
       font-weight: 700;
       transition: background 0.2s, transform 0.15s;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
     }
-    .btn-login:hover { background: var(--blue-hover); transform: scale(1.01); }
+    .btn-continue:hover { background: var(--blue-hover); transform: scale(1.01); }
+    .btn-continue:active { transform: scale(0.99); }
 
-    .form-divider {
+    /* Divider */
+    .divider {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin: 20px 0;
+      width: 100%;
+      margin-bottom: 16px;
     }
-    .form-divider::before, .form-divider::after {
+    .divider::before, .divider::after {
       content: ''; flex: 1; height: 1px; background: var(--border-3);
     }
-    .form-divider span { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+    .divider span { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
 
-    .btn-create {
+    /* Social buttons */
+    .social-row {
+      display: flex;
+      gap: 12px;
       width: 100%;
-      height: 50px;
-      background: var(--white);
-      color: var(--blue);
-      border: 1.5px solid var(--blue);
-      border-radius: var(--radius-md);
-      font-size: 16px;
-      font-weight: 700;
-      transition: background 0.2s;
+      margin-bottom: 28px;
     }
-    .btn-create:hover { background: var(--bg-brand-light); }
-
-    .form-footer {
-      margin-top: 36px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-3);
+    .btn-social {
+      flex: 1;
+      height: 48px;
+      background: var(--bg);
+      border: 1.5px solid var(--border-3);
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .form-footer-logo { height: 22px; width: auto; }
-    .form-footer-links { display: flex; gap: 16px; }
-    .form-footer-links a { font-size: 12px; color: var(--text-secondary); }
-    .form-footer-links a:hover { color: var(--text); }
+    .btn-social:hover { background: #ebebf0; border-color: var(--border); }
+    .btn-social svg { width: 22px; height: 22px; }
 
-    /* ── Mobile ── */
-    @media (max-width: 900px) {
-      .login-page { grid-template-columns: 1fr; }
-
-      .hero-side {
-        min-height: 320px;
-        padding: 32px 24px 40px;
-      }
-      .hero-headline h1 { font-size: 36px; }
-      .float-card-1 { right: 20px; top: 80px; width: 160px; }
-      .float-card-2, .float-card-4 { display: none; }
-      .float-card-3 { right: 24px; top: 170px; width: 160px; }
-      .float-badge-1 { top: 32px; }
-      .float-badge-2, .float-badge-3 { display: none; }
-
-      .form-side { padding: 36px 24px 48px; }
-      .form-logo { margin-bottom: 32px; }
-      .form-footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+    /* Sign up link */
+    .signup-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      text-align: center;
     }
+    .signup-text a {
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .signup-text a:hover { text-decoration: underline; }
+
+    /* Bottom logo */
+    .bottom-logo {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .bottom-logo img {
+      height: 24px;
+      width: auto;
+      filter: invert(1) brightness(0);
+      opacity: 0.5;
+    }
+    .bottom-links {
+      display: flex;
+      gap: 16px;
+    }
+    .bottom-links a {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .bottom-links a:hover { color: var(--text); }
   </style>
 </head>
 <body>
 
-<div class="login-page">
+<div class="page">
 
-  <!-- ── LEFT: Shory visual side ── -->
-  <div class="hero-side">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
+  <!-- Back to home -->
+  <a href="index.html" class="back-btn">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 14l-5-5 5-5"/>
+    </svg>
+    Back to home
+  </a>
 
-    <img class="hero-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" />
+  <!-- Form -->
+  <div class="form-wrap">
 
-    <!-- Floating product cards -->
-    <div class="floats">
+    <!-- Lock icon -->
+    <svg class="lock-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="80" rx="20" fill="#EEF3FF"/>
+      <rect x="22" y="38" width="36" height="26" rx="6" fill="#1d68ff"/>
+      <path d="M28 38v-8a12 12 0 0 1 24 0v8" stroke="#1d68ff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="40" cy="51" r="4" fill="white"/>
+      <rect x="38.5" y="51" width="3" height="6" rx="1.5" fill="white"/>
+    </svg>
 
-      <!-- Car insurance -->
-      <div class="float-card float-card-1">
-        <div class="float-card-icon">
-          <img src="./assets/vehicle.png" alt="Car" />
-        </div>
-        <div>
-          <div class="float-card-label">Car insurance</div>
-          <div class="float-card-value">From د.إ512</div>
-        </div>
-      </div>
+    <h1 class="form-title">Welcome back</h1>
 
-      <!-- Health insurance -->
-      <div class="float-card float-card-2">
-        <div class="float-card-icon">
-          <img src="./assets/health.png" alt="Health" />
-        </div>
-        <div>
-          <div class="float-card-label">Health insurance</div>
-          <div class="float-card-value">From د.إ650</div>
-        </div>
-      </div>
-
-      <!-- Home insurance -->
-      <div class="float-card float-card-3">
-        <div class="float-card-icon">
-          <img src="./assets/building.png" alt="Home" />
-        </div>
-        <div>
-          <div class="float-card-label">Home insurance</div>
-          <div class="float-card-value">From د.إ320</div>
-        </div>
-      </div>
-
-      <!-- Pet insurance -->
-      <div class="float-card float-card-4">
-        <div class="float-card-icon">
-          <img src="./assets/pet.png" alt="Pet" />
-        </div>
-        <div>
-          <div class="float-card-label">Pet insurance</div>
-          <div class="float-card-value">From د.إ280</div>
-        </div>
-      </div>
-
-      <!-- Badges -->
-      <div class="float-badge float-badge-1">
-        <span class="float-badge-star">★</span> 4.8 rated · 200K+ policies
-      </div>
-      <div class="float-badge float-badge-2">
-        🛡️ Licensed by CBUAE
-      </div>
-      <div class="float-badge float-badge-3">
-        ⚡ Get insured in 60 seconds
-      </div>
-
-    </div>
-
-    <!-- Headline + avatars -->
-    <div class="hero-headline">
-      <h1>Compare &amp; buy<br>insurance<br><span>the smart way.</span></h1>
-      <p>30+ top UAE insurers. Instant quotes. Zero hassle. All online.</p>
-
-      <div class="hero-avatars">
-        <img src="./assets/ffb3bc751a1e91e8b288e076f08a88b6e6db91b6.png" alt="" />
-        <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
-        <img src="./assets/34bf2d8072fa028eec5aa550a325ac4398be383c.png" alt="" />
-        <img src="./assets/4ae6aec98f08d589e7801d4d0e50cd6c1f538328.png" alt="" />
-        <div class="hero-avatars-label">Join <strong>1 million+</strong> happy customers</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── RIGHT: Login form ── -->
-  <div class="form-side">
-
-    <img class="form-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter: invert(1) brightness(0);" />
-
-    <div class="form-title">Log into Shory</div>
-    <div class="form-sub">Welcome back! Get instant quotes and manage your policies.</div>
-
-    <form>
-      <div class="form-group">
-        <label class="form-label" for="email">Email or mobile number</label>
-        <input class="form-input" id="email" type="text" placeholder="Enter your email or mobile" autocomplete="email" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="password">Password</label>
-        <input class="form-input" id="password" type="password" placeholder="Enter your password" autocomplete="current-password" />
-      </div>
-
-      <div class="form-forgot"><a href="#">Forgot password?</a></div>
-
-      <button class="btn-login" type="submit">Log in</button>
+    <form style="width:100%">
+      <input class="form-input" type="email" placeholder="Enter your email address" autocomplete="email" />
+      <input class="form-input" type="password" placeholder="Enter your password" autocomplete="current-password" />
+      <button class="btn-continue" type="submit">Continue</button>
     </form>
 
-    <div class="form-divider"><span>or</span></div>
+    <div class="divider"><span>or log in using</span></div>
 
-    <button class="btn-create" onclick="location.href='#'">Create new account</button>
-
-    <div class="form-footer">
-      <img class="form-footer-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter: invert(1) brightness(0); opacity: 0.4;" />
-      <div class="form-footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms</a>
-        <a href="#">Help</a>
-      </div>
+    <div class="social-row">
+      <!-- Facebook -->
+      <button class="btn-social" aria-label="Log in with Facebook">
+        <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.885v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      </button>
+      <!-- Apple -->
+      <button class="btn-social" aria-label="Log in with Apple">
+        <svg viewBox="0 0 24 24" fill="#000"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.22.74 2.98.8 1.12-.19 2.19-.88 3.39-.84 1.45.07 2.52.6 3.23 1.54-3 1.81-2.4 5.8.47 6.92-.52 1.39-1.19 2.73-2.07 4.44zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+      </button>
+      <!-- Google -->
+      <button class="btn-social" aria-label="Log in with Google">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      </button>
     </div>
 
+    <p class="signup-text">New to Shory? <a href="#">Sign up</a></p>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-logo">
+    <img src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" />
+    <div class="bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="#">Help</a>
+    </div>
   </div>
 
 </div>
