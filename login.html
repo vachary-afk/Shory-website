@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in — Shory</title>
+  <style>
+    /* ── Design Tokens (mirrored from main site) ── */
+    :root {
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --blue: #1d68ff;
+      --blue-hover: #1558e0;
+      --bg-brand-light: #f0f5ff;
+      --text: #000000;
+      --text-secondary: #606476;
+      --white: #ffffff;
+      --bg: #f5f6f9;
+      --card: #ffffff;
+      --border: #bec0ca;
+      --border-3: #e3e4e8;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 999px;
+      --elevation-sm: 0 1px 3px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.08);
+      --elevation-md: 0 4px 12px rgba(0,0,0,0.10), 0 8px 24px rgba(0,0,0,0.08);
+      --elevation-lg: 0 8px 32px rgba(0,0,0,0.12), 0 16px 48px rgba(0,0,0,0.08);
+      --color-star: #f5a623;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--white); color: var(--text); }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: var(--font); cursor: pointer; border: none; }
+    input { font-family: var(--font); }
+
+    /* ── Layout ── */
+    .login-page {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      min-height: 100vh;
+    }
+
+    /* ── LEFT: Hero visual ── */
+    .hero-side {
+      background: linear-gradient(135deg, #0a0f1e 0%, #0d1f3d 50%, #0a1628 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 48px 56px;
+    }
+
+    /* Subtle grid pattern */
+    .hero-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(29,104,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,104,255,0.08) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .hero-logo {
+      position: relative;
+      z-index: 2;
+      height: 32px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .hero-headline {
+      position: relative;
+      z-index: 2;
+      margin-top: auto;
+      padding-bottom: 8px;
+    }
+    .hero-headline h1 {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.12;
+      color: var(--white);
+      letter-spacing: -1px;
+    }
+    .hero-headline h1 span { color: var(--blue); }
+    .hero-headline p {
+      margin-top: 14px;
+      font-size: 17px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      max-width: 400px;
+    }
+
+    /* Floating UI cards */
+    .floats {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Insurance product card floating */
+    .float-card {
+      position: absolute;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-xl);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--white);
+    }
+    .float-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: rgba(29,104,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .float-card-icon img { width: 28px; height: 28px; object-fit: contain; }
+    .float-card-label { font-size: 13px; opacity: 0.7; margin-bottom: 2px; }
+    .float-card-value { font-size: 15px; font-weight: 700; }
+
+    .float-card-1 {
+      top: 120px; right: 56px;
+      width: 200px;
+      animation: floatUp 4s ease-in-out infinite;
+    }
+    .float-card-2 {
+      top: 210px; left: 56px;
+      width: 190px;
+      animation: floatUp 4s ease-in-out infinite 1.2s;
+    }
+    .float-card-3 {
+      top: 340px; right: 80px;
+      width: 195px;
+      animation: floatUp 4s ease-in-out infinite 0.6s;
+    }
+    .float-card-4 {
+      top: 440px; left: 72px;
+      width: 185px;
+      animation: floatUp 4s ease-in-out infinite 1.8s;
+    }
+
+    /* Badge: rating */
+    .float-badge {
+      position: absolute;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-full);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .float-badge-star { color: var(--color-star); font-size: 15px; }
+
+    .float-badge-1 { top: 72px; left: 50%; transform: translateX(-50%); animation: floatUp 4s ease-in-out infinite 0.4s; }
+    .float-badge-2 { bottom: 160px; right: 56px; animation: floatUp 4s ease-in-out infinite 2s; }
+    .float-badge-3 { bottom: 220px; left: 56px; animation: floatUp 4s ease-in-out infinite 1s; }
+
+    /* Glow orbs */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .glow-1 { width: 320px; height: 320px; background: rgba(29,104,255,0.25); top: 10%; left: 20%; }
+    .glow-2 { width: 200px; height: 200px; background: rgba(139,92,246,0.2); bottom: 20%; right: 15%; }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Avatars row */
+    .hero-avatars {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 28px;
+    }
+    .hero-avatars img {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      object-fit: cover;
+      margin-right: -10px;
+    }
+    .hero-avatars img:last-child { margin-right: 0; }
+    .hero-avatars-label {
+      margin-left: 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .hero-avatars-label strong { color: var(--white); }
+
+    /* ── RIGHT: Form side ── */
+    .form-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 56px;
+      background: var(--white);
+      border-left: 1px solid var(--border-3);
+    }
+
+    .form-logo {
+      height: 28px;
+      width: auto;
+      margin-bottom: 48px;
+      display: block;
+    }
+
+    .form-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .form-sub {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input::placeholder { color: #adb0be; }
+    .form-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29,104,255,0.12); }
+
+    .form-forgot {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 24px;
+    }
+    .form-forgot a {
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 500;
+    }
+    .form-forgot a:hover { text-decoration: underline; }
+
+    .btn-login {
+      width: 100%;
+      height: 50px;
+      background: var(--blue);
+      color: var(--white);
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 12px;
+    }
+    .btn-login:hover { background: var(--blue-hover); transform: scale(1.01); }
+
+    .form-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .form-divider::before, .form-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border-3);
+    }
+    .form-divider span { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+
+    .btn-create {
+      width: 100%;
+      height: 50px;
+      background: var(--white);
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .btn-create:hover { background: var(--bg-brand-light); }
+
+    .form-footer {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .form-footer-logo { height: 22px; width: auto; }
+    .form-footer-links { display: flex; gap: 16px; }
+    .form-footer-links a { font-size: 12px; color: var(--text-secondary); }
+    .form-footer-links a:hover { color: var(--text); }
+
+    /* ── Mobile ── */
+    @media (max-width: 900px) {
+      .login-page { grid-template-columns: 1fr; }
+
+      .hero-side {
+        min-height: 320px;
+        padding: 32px 24px 40px;
+      }
+      .hero-headline h1 { font-size: 36px; }
+      .float-card-1 { right: 20px; top: 80px; width: 160px; }
+      .float-card-2, .float-card-4 { display: none; }
+      .float-card-3 { right: 24px; top: 170px; width: 160px; }
+      .float-badge-1 { top: 32px; }
+      .float-badge-2, .float-badge-3 { display: none; }
+
+      .form-side { padding: 36px 24px 48px; }
+      .form-logo { margin-bottom: 32px; }
+      .form-footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- ── LEFT: Shory visual side ── -->
+  <div class="hero-side">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <img class="hero-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" />
+
+    <!-- Floating product cards -->
+    <div class="floats">
+
+      <!-- Car insurance -->
+      <div class="float-card float-card-1">
+        <div class="float-card-icon">
+          <img src="./assets/vehicle.png" alt="Car" />
+        </div>
+        <div>
+          <div class="float-card-label">Car insurance</div>
+          <div class="float-card-value">From د.إ512</div>
+        </div>
+      </div>
+
+      <!-- Health insurance -->
+      <div class="float-card float-card-2">
+        <div class="float-card-icon">
+          <img src="./assets/health.png" alt="Health" />
+        </div>
+        <div>
+          <div class="float-card-label">Health insurance</div>
+          <div class="float-card-value">From د.إ650</div>
+        </div>
+      </div>
+
+      <!-- Home insurance -->
+      <div class="float-card float-card-3">
+        <div class="float-card-icon">
+          <img src="./assets/building.png" alt="Home" />
+        </div>
+        <div>
+          <div class="float-card-label">Home insurance</div>
+          <div class="float-card-value">From د.إ320</div>
+        </div>
+      </div>
+
+      <!-- Pet insurance -->
+      <div class="float-card float-card-4">
+        <div class="float-card-icon">
+          <img src="./assets/pet.png" alt="Pet" />
+        </div>
+        <div>
+          <div class="float-card-label">Pet insurance</div>
+          <div class="float-card-value">From د.إ280</div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="float-badge float-badge-1">
+        <span class="float-badge-star">★</span> 4.8 rated · 200K+ policies
+      </div>
+      <div class="float-badge float-badge-2">
+        🛡️ Licensed by CBUAE
+      </div>
+      <div class="float-badge float-badge-3">
+        ⚡ Get insured in 60 seconds
+      </div>
+
+    </div>
+
+    <!-- Headline + avatars -->
+    <div class="hero-headline">
+      <h1>Compare &amp; buy<br>insurance<br><span>the smart way.</span></h1>
+      <p>30+ top UAE insurers. Instant quotes. Zero hassle. All online.</p>
+
+      <div class="hero-avatars">
+        <img src="./assets/ffb3bc751a1e91e8b288e076f08a88b6e6db91b6.png" alt="" />
+        <img src="./assets/1fb4d787bbdd556125557c85df04edd4ed2873af.png" alt="" />
+        <img src="./assets/34bf2d8072fa028eec5aa550a325ac4398be383c.png" alt="" />
+        <img src="./assets/4ae6aec98f08d589e7801d4d0e50cd6c1f538328.png" alt="" />
+        <div class="hero-avatars-label">Join <strong>1 million+</strong> happy customers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Login form ── -->
+  <div class="form-side">
+
+    <img class="form-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter: invert(1) brightness(0);" />
+
+    <div class="form-title">Log into Shory</div>
+    <div class="form-sub">Welcome back! Get instant quotes and manage your policies.</div>
+
+    <form>
+      <div class="form-group">
+        <label class="form-label" for="email">Email or mobile number</label>
+        <input class="form-input" id="email" type="text" placeholder="Enter your email or mobile" autocomplete="email" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" id="password" type="password" placeholder="Enter your password" autocomplete="current-password" />
+      </div>
+
+      <div class="form-forgot"><a href="#">Forgot password?</a></div>
+
+      <button class="btn-login" type="submit">Log in</button>
+    </form>
+
+    <div class="form-divider"><span>or</span></div>
+
+    <button class="btn-create" onclick="location.href='#'">Create new account</button>
+
+    <div class="form-footer">
+      <img class="form-footer-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter: invert(1) brightness(0); opacity: 0.4;" />
+      <div class="form-footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Help</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
