@@ -83,6 +83,9 @@
     html:not([data-theme="dark"]) .icon-moon { display: none; }
     html[data-theme="dark"] .icon-sun { display: none; }
 
+    .dh { display: inline-block; font-style: normal; font-weight: 700; letter-spacing: -0.5px; }
+    .dh::before { content: 'Dh\00a0'; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; font-family: var(--font); color: var(--text); background: var(--white); }
     img { display: block; }
@@ -337,6 +340,48 @@
     .signup-text a { color: var(--blue); font-weight: 700; }
     .signup-text a:hover { text-decoration: underline; }
 
+    /* ── DS Form Field component ── */
+    .ds-field { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 14px; }
+    .ds-field-label {
+      font-size: 12px; font-weight: var(--font-weight-medium);
+      color: var(--text-secondary); letter-spacing: 0.1px;
+    }
+    .ds-field-wrap {
+      display: flex; align-items: center; gap: 8px;
+      height: 44px; padding: 0 12px;
+      border: 1.5px solid var(--border-3);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ds-field-wrap:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(29,104,255,0.12);
+    }
+    .ds-field-icon { flex-shrink: 0; color: var(--text-secondary); }
+    .ds-field-input {
+      flex: 1; border: none; outline: none;
+      font-size: 14px; color: var(--text);
+      background: transparent; font-family: var(--font);
+    }
+    .ds-field-input::placeholder { color: #adb0be; }
+    .ds-field-eye {
+      background: none; border: none; padding: 2px;
+      color: var(--text-secondary); cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ds-field-hint { display: flex; justify-content: flex-end; }
+    .ds-field-hint-link { font-size: 12px; color: var(--blue); font-weight: 500; }
+    .ds-field-hint-link:hover { text-decoration: underline; }
+    .ds-field-error {
+      background: #fff0f0; border: 1px solid #ff4444;
+      border-radius: var(--radius-md); padding: 10px 14px;
+      font-size: 13px; color: #cc0000;
+      margin-bottom: 8px;
+    }
+    html[data-theme="dark"] .ds-field-wrap { background: var(--card); border-color: var(--border); }
+    html[data-theme="dark"] .ds-field-input { color: var(--text); }
+
     /* ── Footer ── */
     .site-footer {
       border-top: var(--border-width) solid var(--border-3);
@@ -431,7 +476,7 @@
             <div class="c3-body">
               <div class="c3-label">Best match for you</div>
               <div class="c3-title">Comprehensive Cover</div>
-              <div class="c3-price">From <span style="font-family:Arial,sans-serif">د.إ</span>512 / year</div>
+              <div class="c3-price">From <em class="dh"></em>512 / year</div>
             </div>
             <div class="c3-bar"><div class="c3-bar-fill"></div></div>
           </div>
@@ -458,9 +503,30 @@
 
         <h1 class="form-title">Log into Shory.</h1>
 
-        <form>
-          <input class="form-input" type="email" placeholder="Enter your email address" autocomplete="email" />
-          <input class="form-input" type="password" placeholder="Enter your password" autocomplete="current-password" />
+        <form id="login-form" novalidate>
+          <!-- DS Form Field: email -->
+          <div class="ds-field">
+            <label class="ds-field-label" for="login-email">Email address</label>
+            <div class="ds-field-wrap">
+              <svg class="ds-field-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="m2 7 8 5 8-5"/></svg>
+              <input class="ds-field-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+          </div>
+
+          <!-- DS Form Field: password -->
+          <div class="ds-field">
+            <label class="ds-field-label" for="login-password">Password</label>
+            <div class="ds-field-wrap">
+              <svg class="ds-field-icon" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="9" width="12" height="9" rx="2"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>
+              <input class="ds-field-input" id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password" />
+              <button type="button" class="ds-field-eye" id="toggle-pw" aria-label="Show password">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="10" cy="10" r="2.5"/></svg>
+              </button>
+            </div>
+            <div class="ds-field-hint"><a href="#" class="ds-field-hint-link">Forgot password?</a></div>
+          </div>
+
+          <div id="login-error" class="ds-field-error" style="display:none"></div>
           <button class="btn-continue" type="submit">Continue</button>
         </form>
 
@@ -498,19 +564,44 @@
 </div>
 
 <script>
-  // Restore saved theme
+  // ── Theme ──
   const saved = localStorage.getItem('shory-theme');
   if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem('shory-theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('shory-theme', 'dark');
+    isDark
+      ? (document.documentElement.removeAttribute('data-theme'), localStorage.setItem('shory-theme','light'))
+      : (document.documentElement.setAttribute('data-theme','dark'), localStorage.setItem('shory-theme','dark'));
+  });
+
+  // ── Password show/hide ──
+  const pwInput = document.getElementById('login-password');
+  document.getElementById('toggle-pw').addEventListener('click', () => {
+    pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+  });
+
+  // ── Login form submit ──
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorEl  = document.getElementById('login-error');
+
+    // Basic validation
+    if (!email || !password) {
+      errorEl.textContent = 'Please enter your email and password.';
+      errorEl.style.display = 'block';
+      return;
     }
+
+    // Simulate login — store user in localStorage
+    const user = { email, name: email.split('@')[0], avatar: null };
+    localStorage.setItem('shory-user', JSON.stringify(user));
+
+    // Redirect: back to referrer or home
+    const redirectTo = sessionStorage.getItem('shory-login-redirect') || 'index.html';
+    sessionStorage.removeItem('shory-login-redirect');
+    window.location.href = redirectTo;
   });
 </script>
 </body>

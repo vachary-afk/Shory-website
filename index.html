@@ -258,6 +258,23 @@
 
     .hamburger { display: none; background: none; padding: var(--gap-sm); width: 44px; height: 44px; align-items: center; justify-content: center; }
     .mobile-search-btn { display: none; }
+
+    /* ── Nav avatar (DS small variant) ── */
+    .nav-avatar { display: flex; align-items: center; cursor: pointer; }
+    .nav-avatar-ring {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-full);
+      border: 2px solid var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background: var(--bg-brand-light);
+      transition: box-shadow 0.2s;
+    }
+    .nav-avatar-ring:hover { box-shadow: 0 0 0 3px rgba(29,104,255,0.2); }
+    .nav-avatar-initials {
+      font-size: 13px; font-weight: var(--font-weight-bold);
+      color: var(--blue); text-transform: uppercase; line-height: 1;
+    }
     .hamburger .ico-stroke { stroke: var(--text); }
 
     /* ── MEGA MENU ── */
@@ -545,6 +562,14 @@
       font-weight: var(--font-weight-medium);
       color: var(--text-secondary);
     }
+    /* UAE Dirham symbol — official shape */
+    .dh {
+      display: inline-block;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .dh::before { content: 'Dh\00a0'; }
     .ins-card-desc {
       font-size: var(--text-size-body-sm);
       font-weight: var(--font-weight-regular);
@@ -1718,7 +1743,13 @@
             </svg>
           </button>
 
-          <button class="btn-login" onclick="location.href='login.html'">Login</button>
+          <button class="btn-login" id="nav-login-btn" onclick="location.href='login.html'">Login</button>
+          <!-- Avatar shown when logged in -->
+          <div class="nav-avatar" id="nav-avatar" style="display:none">
+            <div class="nav-avatar-ring">
+              <div class="nav-avatar-initials" id="nav-avatar-initials"></div>
+            </div>
+          </div>
         </div>
 
         <!-- Search (mobile only, next to hamburger) -->
@@ -1758,7 +1789,7 @@
       <div class="ins-card">
         <div class="ins-card-inner">
           <div class="ins-card-name">Car insurance</div>
-              <div class="ins-card-price">Starting from د.إ512</div>
+              <div class="ins-card-price">Starting from <em class="dh"></em>512</div>
           <div class="ins-card-img">
             <img src="./assets/vehicle.png" alt="Car insurance" />
           </div>
@@ -1781,7 +1812,7 @@
       <div class="ins-card">
         <div class="ins-card-inner">
           <div class="ins-card-name">Health insurance</div>
-          <div class="ins-card-price">Starting from د.إ650</div>
+          <div class="ins-card-price">Starting from <em class="dh"></em>650</div>
           <div class="ins-card-img">
             <img src="./assets/health.png" alt="Health insurance" />
           </div>
@@ -1804,7 +1835,7 @@
       <div class="ins-card">
         <div class="ins-card-inner">
           <div class="ins-card-name">Home insurance</div>
-          <div class="ins-card-price">Starting from د.إ320</div>
+          <div class="ins-card-price">Starting from <em class="dh"></em>320</div>
           <div class="ins-card-img">
             <img src="./assets/building.png" alt="Home insurance" />
           </div>
@@ -1827,7 +1858,7 @@
       <div class="ins-card">
         <div class="ins-card-inner">
           <div class="ins-card-name">Pet insurance</div>
-          <div class="ins-card-price">Starting from د.إ320</div>
+          <div class="ins-card-price">Starting from <em class="dh"></em>320</div>
           <div class="ins-card-img">
             <img src="./assets/pet.png" alt="Pet insurance" />
           </div>
@@ -2534,6 +2565,37 @@
   // Restore saved preference
   const saved = localStorage.getItem('shory-theme');
   if (saved === 'dark') html.setAttribute('data-theme', 'dark');
+
+  // ── Auth state: show avatar or login button ──
+  (() => {
+    const user = JSON.parse(localStorage.getItem('shory-user') || 'null');
+    const loginBtn   = document.getElementById('nav-login-btn');
+    const avatarEl   = document.getElementById('nav-avatar');
+    const initialsEl = document.getElementById('nav-avatar-initials');
+
+    if (user) {
+      // Show avatar, hide login button
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (avatarEl) avatarEl.style.display = 'flex';
+      if (initialsEl) {
+        const initials = user.name.slice(0,2).toUpperCase();
+        initialsEl.textContent = initials;
+      }
+      // Click avatar → logout option
+      avatarEl.addEventListener('click', () => {
+        if (confirm(`Log out of ${user.email}?`)) {
+          localStorage.removeItem('shory-user');
+          location.reload();
+        }
+      });
+    } else {
+      // Save current page so login can redirect back
+      document.getElementById('nav-login-btn')?.addEventListener('click', () => {
+        sessionStorage.setItem('shory-login-redirect', window.location.href);
+        window.location.href = 'login.html';
+      });
+    }
+  })();
 
   const toggleTheme = () => {
     const isDark = html.getAttribute('data-theme') === 'dark';
