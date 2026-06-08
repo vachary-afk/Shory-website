@@ -53,6 +53,36 @@
       --elevation-lg: 0 8px 32px rgba(0,0,0,0.12), 0 16px 48px rgba(0,0,0,0.08);
     }
 
+    /* ── Dark mode overrides ── */
+    html[data-theme="dark"] {
+      --text: #f0f1f5;
+      --text-secondary: #9ea0b0;
+      --text-common: #e8e9ef;
+      --white: #ffffff;
+      --bg: #0f1117;
+      --card: #1e2130;
+      --border: #2e3040;
+      --border-2: #2a2d3e;
+      --border-3: #252838;
+      --bg-brand-light: #0d1f3d;
+    }
+    html[data-theme="dark"] body { background: #0f1117; }
+    html[data-theme="dark"] .site-header { background: #000; box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
+    html[data-theme="dark"] .hero-side { background: #0f1117; border-right-color: var(--border-3); }
+    html[data-theme="dark"] .form-side { background: #0f1117; }
+    html[data-theme="dark"] .site-footer { background: #000; border-top-color: var(--border-3); }
+    html[data-theme="dark"] .c3 { background: var(--card); }
+    html[data-theme="dark"] .c-rating { background: var(--card); }
+    html[data-theme="dark"] .c-emoji { background: var(--card); }
+    html[data-theme="dark"] .form-input { background: var(--card); color: var(--text); border-color: var(--border); }
+    html[data-theme="dark"] .btn-social { background: var(--card); border-color: var(--border-3); }
+    html[data-theme="dark"] .btn-help, html[data-theme="dark"] .btn-lang { color: var(--text); border-color: var(--border); }
+    html[data-theme="dark"] .header-logo { filter: brightness(0) invert(1) !important; }
+
+    /* Theme toggle icon */
+    html:not([data-theme="dark"]) .icon-moon { display: none; }
+    html[data-theme="dark"] .icon-sun { display: none; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; font-family: var(--font); color: var(--text); background: var(--white); }
     img { display: block; }
@@ -341,9 +371,21 @@
   <!-- ── Header — same structure as home page ── -->
   <header class="site-header">
     <div class="header-inner">
-      <img class="header-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter:invert(1) brightness(0);" />
+      <a href="index.html" style="display:flex;align-items:center;"><img class="header-logo" src="./assets/c93d550f0ba6ed6b5b77a34442c8a8417fe17139.svg" alt="Shory" style="filter:invert(1) brightness(0);" /></a>
       <div class="header-nav-right">
         <button class="btn-help">Help</button>
+        <!-- Theme toggle -->
+        <button id="theme-toggle" class="btn-help" style="width:40px;padding:0;justify-content:center;" aria-label="Toggle theme">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+            <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+          </svg>
+        </button>
         <button class="btn-lang">
           <span>🇦🇪</span>
           <span>عربي</span>
@@ -455,5 +497,21 @@
 
 </div>
 
+<script>
+  // Restore saved theme
+  const saved = localStorage.getItem('shory-theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('shory-theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('shory-theme', 'dark');
+    }
+  });
+</script>
 </body>
 </html>
